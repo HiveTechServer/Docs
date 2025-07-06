@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Server Addons/Mods</title>
   <style>
-    /* ✅ CSS: Unchanged from your original file */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,9 +44,16 @@
     .nav-tab:hover:not(.active) {
       background: rgba(255, 140, 66, 0.3);
     }
+    .content-area {
+      flex: 1;
+      padding: 20px 30px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
     .glassy-bar {
-      width: 100vw;
-      height: 60px;
+      width: 100%;
+      margin-top: 20px;
       background: linear-gradient(135deg, rgba(120,120,120,0.4), rgba(140,140,140,0.3), rgba(100,100,100,0.35));
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -56,11 +62,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 30px;
-      margin-top: 20px;
+      padding: 0 0;
       position: relative;
-      margin-left: -20px;
-      margin-right: -20px;
     }
     .logo-preview {
       display: flex;
@@ -76,23 +79,18 @@
       width: 36px;
       height: 36px;
       border-radius: 6px;
-      background: rgba(255,255,255,0.2);
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      color: white;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      font-weight: 600;
     }
-    .glassy-bar::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 50%, rgba(255,255,255,0.05));
-      pointer-events: none;
+    .preview-logo img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      width: auto;
+      height: auto;
+      display: block;
     }
     .addon-title {
       color: white;
@@ -115,10 +113,10 @@
       background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2), rgba(255,255,255,0.3));
       border: 1px solid rgba(255,255,255,0.3);
       color: #333;
-      padding: 10px 20px;
+      padding: 7px 14px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       backdrop-filter: blur(5px);
       transition: all 0.3s ease;
@@ -143,26 +141,14 @@
       border: 1px solid rgba(0,255,255,0.5);
       text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
-    .content-area { flex: 1; padding: 20px; }
-    .bottom-section { margin-top: auto; }
-    .bottom-line { width: 100%; height: 2px; background: #000; }
-    .bottom-info {
-      background: #333;
-      padding: 8px 20px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      min-height: 35px;
-    }
-    .info-text { color: #ccc; font-size: 12px; }
     .addon-panel {
-      width: 100vw;
+      width: 100%;
+      margin: 0;
       background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.2), rgba(255,255,255,0.25));
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.2);
       border-top: 2px solid #000;
-      margin: 20px -20px;
-      padding: 20px 30px;
+      padding: 20px 0;
       position: relative;
       max-height: 0;
       overflow: hidden;
@@ -207,17 +193,33 @@
       width: 64px;
       height: 64px;
       border-radius: 8px;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
     }
     .addon-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 8px;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      width: auto;
+      height: auto;
+      display: block;
     }
+
+    .bottom-section { margin-top: auto; }
+    .bottom-line { width: 100%; height: 2px; background: #000; }
+    .bottom-info {
+      background: #333;
+      padding: 8px 20px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      min-height: 35px;
+    }
+    .info-text { color: #ccc; font-size: 12px; }
   </style>
 </head>
 <body>
@@ -230,31 +232,30 @@
   <div class="top-line"></div>
 
   <div class="content-area">
+    <!-- Server Software Section -->
     <div class="glassy-bar">
-      <h1 class="addon-title" onclick="toggleAddonPanel()">Addons</h1>
-      <div class="logo-preview" id="logoPreview"></div>
+      <h1 class="addon-title" onclick="toggleAddonPanel('addonPanel1', 'logoPreview1')">Server Software</h1>
+      <div class="logo-preview" id="logoPreview1"></div>
       <div class="filter-controls">
-        <button class="filter-button cmp" onclick="filterByTag('cmp')" id="cmpButton">CMP</button>
-        <button class="filter-button smp" onclick="filterByTag('smp')" id="smpButton">SMP</button>
-        <button class="filter-button" onclick="filterByTag('all')" id="allButton">Show All</button>
+        <button class="filter-button cmp" onclick="filterByTag('addonPanel1', 'logoPreview1', 'cmpButton1', 'cmp')" id="cmpButton1">CMP</button>
+        <button class="filter-button smp" onclick="filterByTag('addonPanel1', 'logoPreview1', 'smpButton1', 'smp')" id="smpButton1">SMP</button>
+        <button class="filter-button" onclick="filterByTag('addonPanel1', 'logoPreview1', 'allButton1', 'all')" id="allButton1">Show All</button>
       </div>
     </div>
 
-    <div class="addon-panel" id="addonPanel">
-      <!-- 🎯 HTML-only addons -->
-      <div class="addon-item" data-tags="cmp">
+    <div class="addon-panel" id="addonPanel1">
+      <div class="addon-item" data-tags="cmp,smp">
         <div class="addon-info">
-          <div class="addon-tags"><span class="tag cmp">CMP</span></div>
-          <div class="addon-name">OptiFine</div>
-          <div class="addon-developer">by sp614x</div>
-          <a href="https://optifine.net/downloads" target="_blank">
+          <div class="addon-tags"><span class="tag cmp">CMP</span><span class="tag smp">SMP</span></div>
+          <div class="addon-name">LeviLamina</div>
+          <div class="addon-developer">by LiteLDev</div>
+          <a href="https://github.com/LiteLDev/LeviLamina" target="_blank">
             <button class="filter-button" style="margin-top:10px;">Download</button>
           </a>
-          <div style="margin-top:6px; font-size:12px; color:#eee;">Required for shaders and visuals</div>
+          <div style="margin-top:6px; font-size:12px; color:#eee;">Running on 1.21.80</div>
         </div>
-        <div class="addon-logo"><img src="https://via.placeholder.com/64" alt="OptiFine"></div>
+        <div class="addon-logo"><img src="https://repository-images.githubusercontent.com/333478800/3ea09392-0de9-4f2d-8a36-be6ead3e44e5" alt="LeviLamina"></div>
       </div>
-      <!-- Add more .addon-item elements as needed -->
     </div>
   </div>
 
@@ -264,50 +265,87 @@
   </div>
 
   <script>
-    let currentFilter = 'all';
+    const sectionFilters = {};
 
-    function toggleAddonPanel() {
-      const panel = document.getElementById('addonPanel');
-      const logoPreview = document.getElementById('logoPreview');
-      panel.classList.toggle('expanded');
-      logoPreview.classList.toggle('hidden');
-      if (panel.classList.contains('expanded')) applyCurrentFilter();
+    function toggleAddonPanel(panelId, previewId) {
+      const panel = document.getElementById(panelId);
+      const preview = document.getElementById(previewId);
+      const isOpen = panel.classList.contains('expanded');
+
+      if (isOpen) {
+        panel.classList.remove('expanded');
+        preview.classList.remove('hidden');
+      } else {
+        sectionFilters[panelId] = 'all';
+        panel.classList.add('expanded');
+        preview.classList.add('hidden');
+        applyFilter(panelId, previewId);
+      }
+
+      updateFilterButtons(panelId);
     }
 
-    function updateButtonStates() {
-      document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(currentFilter + 'Button')?.classList.add('active');
+    function filterByTag(panelId, previewId, buttonId, tag) {
+      sectionFilters[panelId] = tag;
+      const panel = document.getElementById(panelId);
+      const preview = document.getElementById(previewId);
+
+      if (!panel.classList.contains('expanded')) {
+        panel.classList.add('expanded');
+        preview.classList.add('hidden');
+      }
+
+      applyFilter(panelId, previewId);
+      updateFilterButtons(panelId);
     }
 
-    function filterByTag(tag) {
-      currentFilter = tag;
-      const panel = document.getElementById('addonPanel');
-      if (!panel.classList.contains('expanded')) panel.classList.add('expanded');
-      applyCurrentFilter();
-    }
-
-    function applyCurrentFilter() {
-      updateButtonStates();
-      const addons = document.querySelectorAll('.addon-item');
-      const logos = document.getElementById('logoPreview');
-      logos.innerHTML = '';
-      addons.forEach(addon => {
-        const tags = addon.getAttribute('data-tags') || '';
-        const tagList = tags.split(',');
-        const show = currentFilter === 'all' || tagList.includes(currentFilter);
-        addon.style.display = show ? 'flex' : 'none';
-        if (show) {
-          const img = addon.querySelector('.addon-logo img')?.src || '';
-          const logo = document.createElement('div');
-          logo.className = 'preview-logo';
-          logo.innerHTML = `<img src="${img}" alt="">`;
-          logos.appendChild(logo);
+    function updateFilterButtons(panelId) {
+      const currentTag = sectionFilters[panelId];
+      ['cmp', 'smp', 'all'].forEach(tag => {
+        const btn = document.getElementById(`${tag}Button${panelId.replace('addonPanel', '')}`);
+        if (btn) {
+          btn.classList.toggle('active', tag === currentTag);
         }
       });
     }
 
+    function applyFilter(panelId, previewId) {
+      const currentTag = sectionFilters[panelId] || 'all';
+      const panel = document.getElementById(panelId);
+      const preview = document.getElementById(previewId);
+      const addons = panel.querySelectorAll('.addon-item');
+
+      preview.innerHTML = '';
+      let anyVisible = false;
+
+      addons.forEach(addon => {
+        const tags = addon.getAttribute('data-tags')?.split(',') || [];
+        const show = currentTag === 'all' || tags.includes(currentTag);
+        addon.style.display = show ? 'flex' : 'none';
+        if (show) anyVisible = true;
+
+        if (!panel.classList.contains('expanded') && show) {
+          const img = addon.querySelector('.addon-logo img')?.src || '';
+          const logo = document.createElement('div');
+          logo.className = 'preview-logo';
+          logo.innerHTML = `<img src="${img}" alt="">`;
+          preview.appendChild(logo);
+        }
+      });
+
+      if (panel.classList.contains('expanded') && !anyVisible) {
+        panel.classList.remove('expanded');
+        preview.classList.remove('hidden');
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      applyCurrentFilter();
+      document.querySelectorAll('.addon-panel').forEach(panel => {
+        const id = panel.id;
+        const previewId = 'logoPreview' + id.replace('addonPanel', '');
+        sectionFilters[id] = 'all';
+        applyFilter(id, previewId);
+      });
     });
   </script>
 </body>
