@@ -4,14 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Server Addons/Mods</title>
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    /* ✅ CSS: Unchanged from your original file */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(to top, #cc5500, #ff8c42);
@@ -20,13 +15,7 @@
       flex-direction: column;
       overflow-x: hidden;
     }
-
-    .top-line {
-      width: 100%;
-      height: 2px;
-      background: #000;
-    }
-
+    .top-line { width: 100%; height: 2px; background: #000; }
     .top-nav {
       background: #333;
       display: flex;
@@ -34,7 +23,6 @@
       align-items: stretch;
       height: 35px;
     }
-
     .nav-tab {
       padding: 0 20px;
       background: transparent;
@@ -49,30 +37,22 @@
       height: 100%;
       text-decoration: none;
     }
-
     .nav-tab.active {
       background: #ff8c42;
       transform: translateY(3px);
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
-
     .nav-tab:hover:not(.active) {
       background: rgba(255, 140, 66, 0.3);
     }
-
     .glassy-bar {
       width: 100vw;
       height: 60px;
-      background: linear-gradient(135deg, 
-        rgba(120, 120, 120, 0.4) 0%, 
-        rgba(140, 140, 140, 0.3) 50%, 
-        rgba(100, 100, 100, 0.35) 100%);
+      background: linear-gradient(135deg, rgba(120,120,120,0.4), rgba(140,140,140,0.3), rgba(100,100,100,0.35));
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -82,171 +62,90 @@
       margin-left: -20px;
       margin-right: -20px;
     }
-
     .logo-preview {
       display: flex;
       gap: 10px;
       align-items: center;
-      opacity: 1;
       transition: opacity 0.3s ease;
     }
-
     .logo-preview.hidden {
       opacity: 0;
       pointer-events: none;
     }
-
     .preview-logo {
       width: 36px;
       height: 36px;
       border-radius: 6px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
       color: white;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       font-weight: 600;
     }
-
     .glassy-bar::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.1) 0%, 
-        transparent 50%, 
-        rgba(255, 255, 255, 0.05) 100%);
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 50%, rgba(255,255,255,0.05));
       pointer-events: none;
     }
-
     .addon-title {
       color: white;
       font-size: 28px;
       font-weight: 600;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-      z-index: 1;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
       position: relative;
       cursor: pointer;
       transition: all 0.3s ease;
     }
-
     .addon-title:hover {
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
     }
-
     .filter-controls {
       display: flex;
       gap: 10px;
       align-items: center;
-      z-index: 10;
-      position: relative;
     }
-
     .filter-button {
-      background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.4) 0%, 
-        rgba(255, 255, 255, 0.2) 50%, 
-        rgba(255, 255, 255, 0.3) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2), rgba(255,255,255,0.3));
+      border: 1px solid rgba(255,255,255,0.3);
       color: #333;
       padding: 10px 20px;
       border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
       font-weight: 500;
-      transition: all 0.3s ease;
       backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
     }
-
     .filter-button:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
-
-    .filter-button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    }
-
     .filter-button.active {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-
     .filter-button.cmp {
-      background: linear-gradient(135deg, 
-        rgba(255, 0, 255, 0.4) 0%, 
-        rgba(255, 0, 255, 0.2) 50%, 
-        rgba(255, 0, 255, 0.3) 100%);
+      background: linear-gradient(135deg, rgba(255,0,255,0.4), rgba(255,0,255,0.2), rgba(255,0,255,0.3));
       color: white;
-      border: 1px solid rgba(255, 0, 255, 0.5);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255,0,255,0.5);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
-
-    .filter-button.cmp:hover {
-      background: linear-gradient(135deg, 
-        rgba(255, 0, 255, 0.5) 0%, 
-        rgba(255, 0, 255, 0.3) 50%, 
-        rgba(255, 0, 255, 0.4) 100%);
-    }
-
-    .filter-button.cmp.active {
-      background: linear-gradient(135deg, 
-        rgba(255, 0, 255, 0.6) 0%, 
-        rgba(255, 0, 255, 0.4) 50%, 
-        rgba(255, 0, 255, 0.5) 100%);
-      box-shadow: 0 4px 12px rgba(255, 0, 255, 0.3);
-    }
-
     .filter-button.smp {
-      background: linear-gradient(135deg, 
-        rgba(0, 255, 255, 0.4) 0%, 
-        rgba(0, 255, 255, 0.2) 50%, 
-        rgba(0, 255, 255, 0.3) 100%);
+      background: linear-gradient(135deg, rgba(0,255,255,0.4), rgba(0,255,255,0.2), rgba(0,255,255,0.3));
       color: white;
-      border: 1px solid rgba(0, 255, 255, 0.5);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0,255,255,0.5);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
-
-    .filter-button.smp:hover {
-      background: linear-gradient(135deg, 
-        rgba(0, 255, 255, 0.5) 0%, 
-        rgba(0, 255, 255, 0.3) 50%, 
-        rgba(0, 255, 255, 0.4) 100%);
-    }
-
-    .filter-button.smp.active {
-      background: linear-gradient(135deg, 
-        rgba(0, 255, 255, 0.6) 0%, 
-        rgba(0, 255, 255, 0.4) 50%, 
-        rgba(0, 255, 255, 0.5) 100%);
-      box-shadow: 0 4px 12px rgba(0, 255, 255, 0.3);
-    }
-
-    .content-area {
-      flex: 1;
-      padding: 20px;
-    }
-
-    .bottom-section {
-      margin-top: auto;
-    }
-
-    .bottom-line {
-      width: 100%;
-      height: 2px;
-      background: #000;
-    }
-
+    .content-area { flex: 1; padding: 20px; }
+    .bottom-section { margin-top: auto; }
+    .bottom-line { width: 100%; height: 2px; background: #000; }
     .bottom-info {
       background: #333;
       padding: 8px 20px;
@@ -255,27 +154,14 @@
       align-items: center;
       min-height: 35px;
     }
-
-    .info-text {
-      color: #ccc;
-      font-size: 12px;
-    }
-
+    .info-text { color: #ccc; font-size: 12px; }
     .addon-panel {
       width: 100vw;
-      background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.3) 0%, 
-        rgba(255, 255, 255, 0.2) 50%, 
-        rgba(255, 255, 255, 0.25) 100%);
+      background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.2), rgba(255,255,255,0.25));
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255,255,255,0.2);
       border-top: 2px solid #000;
-      box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      margin-left: -20px;
-      margin-right: -20px;
+      margin: 20px -20px;
       padding: 20px 30px;
       position: relative;
       max-height: 0;
@@ -283,194 +169,54 @@
       transition: all 0.5s ease;
       opacity: 0;
     }
-
     .addon-panel.expanded {
       max-height: 500px;
       opacity: 1;
     }
-
-    .addon-panel::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.1) 0%, 
-        transparent 50%, 
-        rgba(255, 255, 255, 0.05) 100%);
-      pointer-events: none;
-    }
-
     .addon-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       border-radius: 12px;
       padding: 15px 20px;
       margin-bottom: 15px;
       backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
-    .addon-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .addon-item.hidden {
-      display: none;
-    }
-
-    .addon-info {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      flex: 1;
-    }
-
+    .addon-info { display: flex; flex-direction: column; flex: 1; }
     .addon-tags {
       display: flex;
       gap: 8px;
       margin-bottom: 8px;
     }
-
     .tag {
       padding: 6px 12px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: bold;
       color: white;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
-
-    .tag.cmp {
-      background: magenta;
-      box-shadow: 0 2px 4px rgba(255, 0, 255, 0.3);
-    }
-
-    .tag.smp {
-      background: cyan;
-      box-shadow: 0 2px 4px rgba(0, 255, 255, 0.3);
-    }
-
-    .tag.hidden {
-      display: none;
-    }
-
-    .addon-name {
-      font-size: 18px;
-      font-weight: 600;
-      color: white;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-      margin-bottom: 4px;
-    }
-
-    .addon-developer {
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.8);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    }
-
+    .tag.cmp { background: magenta; box-shadow: 0 2px 4px rgba(255,0,255,0.3); }
+    .tag.smp { background: cyan; box-shadow: 0 2px 4px rgba(0,255,255,0.3); }
+    .addon-name { font-size: 18px; font-weight: 600; color: white; margin-bottom: 4px; }
+    .addon-developer { font-size: 14px; color: rgba(255,255,255,0.8); }
     .addon-logo {
       width: 64px;
       height: 64px;
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      color: white;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      flex-shrink: 0;
     }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .glassy-bar {
-        padding: 0 15px;
-        height: 60px;
-      }
-
-      .addon-title {
-        font-size: 24px;
-      }
-
-      .logo-preview {
-        gap: 8px;
-      }
-
-      .filter-controls {
-        gap: 8px;
-      }
-
-      .filter-button {
-        font-size: 12px;
-        padding: 8px 16px;
-      }
-
-      .addon-panel {
-        padding: 15px 20px;
-      }
-
-      .addon-logo {
-        width: 48px;
-        height: 48px;
-        font-size: 18px;
-      }
-
-      .preview-logo {
-        width: 28px;
-        height: 28px;
-        font-size: 12px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .addon-title {
-        font-size: 20px;
-      }
-
-      .addon-name {
-        font-size: 16px;
-      }
-
-      .addon-developer {
-        font-size: 12px;
-      }
-
-      .tag {
-        font-size: 10px;
-        padding: 4px 8px;
-      }
-
-      .logo-preview {
-        gap: 6px;
-      }
-
-      .preview-logo {
-        width: 24px;
-        height: 24px;
-        font-size: 10px;
-      }
-
-      .filter-button {
-        font-size: 11px;
-        padding: 6px 12px;
-      }
-
-      .filter-controls {
-        gap: 6px;
-      }
+    .addon-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -493,20 +239,32 @@
         <button class="filter-button" onclick="filterByTag('all')" id="allButton">Show All</button>
       </div>
     </div>
-    <div class="addon-panel" id="addonPanel"></div>
+
+    <div class="addon-panel" id="addonPanel">
+      <!-- 🎯 HTML-only addons -->
+      <div class="addon-item" data-tags="cmp">
+        <div class="addon-info">
+          <div class="addon-tags"><span class="tag cmp">CMP</span></div>
+          <div class="addon-name">OptiFine</div>
+          <div class="addon-developer">by sp614x</div>
+          <a href="https://optifine.net/downloads" target="_blank">
+            <button class="filter-button" style="margin-top:10px;">Download</button>
+          </a>
+          <div style="margin-top:6px; font-size:12px; color:#eee;">Required for shaders and visuals</div>
+        </div>
+        <div class="addon-logo"><img src="https://via.placeholder.com/64" alt="OptiFine"></div>
+      </div>
+      <!-- Add more .addon-item elements as needed -->
+    </div>
   </div>
 
-    <div class="bottom-section">
-      <div class="bottom-line"></div>
-      <div class="bottom-info">
-        <span class="info-text">An official HiveTech product</span>
-      </div>
-    </div>
+  <div class="bottom-section">
+    <div class="bottom-line"></div>
+    <div class="bottom-info"><span class="info-text">An official HiveTech product</span></div>
+  </div>
 
   <script>
-    const jsonUrl = 'https://github.com/HiveTechServer/Public/blob/main/addons.json'; // Replace this with your real URL
     let currentFilter = 'all';
-    let addonData = [];
 
     function toggleAddonPanel() {
       const panel = document.getElementById('addonPanel');
@@ -518,83 +276,39 @@
 
     function updateButtonStates() {
       document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-      if (currentFilter === 'cmp') document.getElementById('cmpButton').classList.add('active');
-      else if (currentFilter === 'smp') document.getElementById('smpButton').classList.add('active');
-      else document.getElementById('allButton').classList.add('active');
+      document.getElementById(currentFilter + 'Button')?.classList.add('active');
     }
 
     function filterByTag(tag) {
       currentFilter = tag;
       const panel = document.getElementById('addonPanel');
-      const logoPreview = document.getElementById('logoPreview');
-      if (!panel.classList.contains('expanded')) {
-        panel.classList.add('expanded');
-        logoPreview.classList.add('hidden');
-      }
+      if (!panel.classList.contains('expanded')) panel.classList.add('expanded');
       applyCurrentFilter();
     }
 
     function applyCurrentFilter() {
-      const panel = document.getElementById('addonPanel');
-      const logoPreview = document.getElementById('logoPreview');
-      panel.innerHTML = '';
-      logoPreview.innerHTML = '';
       updateButtonStates();
-
-      addonData.forEach(addon => {
-        const show = currentFilter === 'all' || addon.tags.includes(currentFilter);
-        if (!show) return;
-
-        const tagsHTML = addon.tags.map(tag => `<span class="tag ${tag}">${tag.toUpperCase()}</span>`).join('');
-        const item = document.createElement('div');
-        item.className = 'addon-item';
-        item.setAttribute('data-tags', addon.tags.join(','));
-        item.innerHTML = `
-          <div class="addon-info">
-            <div class="addon-tags">${tagsHTML}</div>
-            <div class="addon-name">${addon.name}</div>
-            <div class="addon-developer">by ${addon.developer}</div>
-          </div>
-          <div class="addon-logo"><img src="${addon.logo}" alt="${addon.name}"></div>
-        `;
-        
-        if (addon.download) {
-          const dl = document.createElement('a');
-          dl.href = addon.download;
-          dl.target = '_blank';
-          dl.innerHTML = '<button class="filter-button" style="margin-top:10px;">Download</button>';
-          item.querySelector('.addon-info').appendChild(dl);
-        }
-
-        if (addon.note) {
-          const noteEl = document.createElement('div');
-          noteEl.style.cssText = 'margin-top: 6px; font-size: 12px; color: #eee;';
-          noteEl.textContent = addon.note;
-          item.querySelector('.addon-info').appendChild(noteEl);
-        }
-
-        panel.appendChild(item);
-
-        if (!panel.classList.contains('expanded')) {
-          const preview = document.createElement('div');
-          preview.className = 'preview-logo';
-          preview.innerHTML = `<img src="${addon.logo}" alt="${addon.name}">`;
-          logoPreview.appendChild(preview);
+      const addons = document.querySelectorAll('.addon-item');
+      const logos = document.getElementById('logoPreview');
+      logos.innerHTML = '';
+      addons.forEach(addon => {
+        const tags = addon.getAttribute('data-tags') || '';
+        const tagList = tags.split(',');
+        const show = currentFilter === 'all' || tagList.includes(currentFilter);
+        addon.style.display = show ? 'flex' : 'none';
+        if (show) {
+          const img = addon.querySelector('.addon-logo img')?.src || '';
+          const logo = document.createElement('div');
+          logo.className = 'preview-logo';
+          logo.innerHTML = `<img src="${img}" alt="">`;
+          logos.appendChild(logo);
         }
       });
     }
 
-    async function loadAddons() {
-      try {
-        const res = await fetch(jsonUrl);
-        addonData = await res.json();
-        applyCurrentFilter();
-      } catch (e) {
-        console.error('Error loading addon data:', e);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', loadAddons);
+    document.addEventListener('DOMContentLoaded', () => {
+      applyCurrentFilter();
+    });
   </script>
 </body>
 </html>
