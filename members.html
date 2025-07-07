@@ -290,7 +290,11 @@
               <div class="member-name">${member.name}</div>
               <div class="member-ign">${member.ign}</div>
               <div class="member-role role-${member.role.toLowerCase()}">
-                <i class="${member.role === 'owner' ? 'fas fa-crown' : member.role === 'manager' ? 'fas fa-shield-halved' : 'fas fa-bug'}"></i>
+                <i class="${
+  member.role === 'owner' ? 'fas fa-crown' :
+  member.role === 'manager' ? 'fas fa-shield-halved' :
+  'fa-regular fa-circle-user'
+}"></i>
                 ${member.role.charAt(0).toUpperCase() + member.role.slice(1)}
               </div>
              <div class="social-icons">
