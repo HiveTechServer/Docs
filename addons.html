@@ -23,7 +23,6 @@
       gap: 12px;
       background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       position: sticky;
       top: 0;
@@ -243,22 +242,16 @@
       padding: 12px;
       font-size: 14px;
       font-weight: 600;
-      color: white;
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #000;
+      background: #ccc;
       border-radius: 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      display: block;
     }
 
     .download-btn:hover {
-      background: rgba(255, 255, 255, 0.4);
-      transform: translateY(-2px);
+      background: #aaa;
     }
 
     @media (max-width: 600px) { .container { transform: scale(0.85); } }
@@ -290,24 +283,13 @@
 
   <div class="bottom-info">An official HiveTech product</div>
 
-  <script type="application/json" id="widget-data">
-  [
-    { "name": "Canopy", "creator": "ForestOfLight", "image": "Canopy.PNG", "tags": ["cmp", "smp", "behaviours"] },
-    { "name": "Canopy", "creator": "ForestOfLight", "image": "Canopy.PNG", "tags": ["mods", "resources"] },
-    { "name": "Canopy", "creator": "ForestOfLight", "image": "Canopy.PNG", "tags": ["smp", "mods"] },
-    { "name": "Canopy", "creator": "ForestOfLight", "image": "Canopy.PNG", "tags": ["resources", "cmp"] },
-    { "name": "Canopy", "creator": "ForestOfLight", "image": "Canopy.PNG", "tags": ["behaviours", "smp"] },
-    { "name": "Canopy", "creator": "ForestOfLight", "image": "Canopy.PNG", "tags": ["cmp", "mods"] }
-  ]
-  </script>
-
   <script>
-    const data = JSON.parse(document.getElementById("widget-data").textContent);
     const container = document.getElementById("widget-container");
     const filterButtons = document.querySelectorAll('.filter-btn');
     const toggleBtn = document.querySelector('.select-toggle-btn');
     const allTags = Array.from(filterButtons).map(btn => btn.dataset.tag);
     const selectedTags = new Set();
+    let data = [];
 
     function renderWidgets(filterTags = []) {
       container.innerHTML = "";
@@ -320,6 +302,8 @@
           .map(tag => `<span class="tag ${tag}">${tag.toUpperCase()}</span>`)
           .join("");
 
+        const githubLink = widget.github || "#";
+
         container.insertAdjacentHTML("beforeend", `
           <div class="widget">
             <img src="${widget.image}" alt="${widget.name}">
@@ -330,11 +314,8 @@
                 <div class="name">${widget.name}</div>
                 <div class="dev-name">Created by: ${widget.creator}</div>
               </div>
-              <a class="download-btn" href="downloads/${widget.name}.zip" download>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                </svg> Download
+              <a class="download-btn" href="${githubLink}" target="_blank">
+                Download
               </a>
             </div>
           </div>
@@ -342,7 +323,12 @@
       });
     }
 
-    renderWidgets([]);
+    fetch('data.json')
+      .then(response => response.json())
+      .then(json => {
+        data = json;
+        renderWidgets([]);
+      });
 
     filterButtons.forEach(button => {
       button.addEventListener('click', () => {

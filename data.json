@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Canopy",
+    "creator": "ForestOfLight",
+    "image": "Canopy.PNG",
+    "tags": [
+      "cmp",
+      "smp",
+      "behaviours"
+    ],
+    "github": "https://github.com/ForestOfLight/Canopy"
+  },
+  {
+    "name": "Understudy (Fake Players)",
+    "creator": "ForestOfLight",
+    "image": "FP.PNG",
+    "tags": [
+      "cmp",
+      "smp",
+      "behaviours"
+    ],
+    "github": "https://github.com/ForestOfLight/Understudy"
+  },
+  {
+    "name": "Statistic Display",
+    "creator": "ForestOfLight",
+    "image": "SD.PNG",
+    "tags": [
+      "smp",
+      "behaviours"
+    ],
+    "github": "https://github.com/ForestOfLight/Statistic-Display"
+  },
+  {
+    "name": "Storage Utilities",
+    "creator": "FireBee, Nipitare and Citrus",
+    "image": "STU.PNG",
+    "tags": [
+      "cmp",
+      "behaviours"
+    ],
+    "github": "https://github.com/StorageUtilities/Storage-Utilities"
+  },
+  {
+    "name": "WorldEdit",
+    "creator": "SIsilicon",
+    "image": "WE.PNG",
+    "tags": [
+      "cmp",
+      "behaviours"
+    ],
+    "github": "https://github.com/SIsilicon/WorldEdit-BE/releases"
+  },
+  {
+    "name": "LeviLamina (Mod loader)",
+    "creator": "LiteLDev",
+    "image": "LeviLamina.jpg",
+    "tags": [
+      "cmp",
+      "smp",
+      "mods"
+    ],
+    "github": "https://github.com/LiteLDev/LeviLamina"
+  },
+  {
+    "name": "Glacie",
+    "creator": "GlacieTeam",
+    "image": "Glacie.jpg",
+    "tags": [
+      "cmp",
+      "smp",
+      "mods"
+    ],
+    "github": "https://github.com/GlacieTeam/Glacie"
+  },
+  {
+    "name": "TechRP",
+    "creator": "MaddHatter",
+    "image": "TechRP.PNG",
+    "tags": [
+      "cmp",
+      "smp",
+      "resources"
+    ],
+    "github": "https://github.com/RavinMaddHatter/Bedrock-Technical-Resource-Pack"
+  },
+  {
+    "name": "Bedrock Tweaks",
+    "creator": "Bedrock Tweaks",
+    "image": "BRT.jpg",
+    "tags": [
+      "cmp",
+      "smp",
+      "resources"
+    ],
+    "github": "https://bedrocktweaks.net/"
+  }
+]
