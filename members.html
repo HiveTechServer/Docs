@@ -259,11 +259,12 @@
                 <i class="${member.role === 'owner' ? 'fas fa-crown' : member.role === 'manager' ? 'fas fa-shield-halved' : 'fas fa-bug'}"></i>
                 ${member.role.charAt(0).toUpperCase() + member.role.slice(1)}
               </div>
-              <div class="social-icons">
-                ${member.youtube ? `<a class="youtube" href="${member.youtube}" target="_blank"><i class="fab fa-youtube"></i></a>` : ''}
-                ${member.twitch ? `<a class="twitch" href="${member.twitch}" target="_blank"><i class="fab fa-twitch"></i></a>` : ''}
-                ${member.discord ? `<a class="discord" href="${member.discord}" target="_blank"><i class="fab fa-discord"></i></a>` : ''}
-              </div>
+             <div class="social-icons">
+  ${member.youtube ? `<a class="youtube" href="${member.youtube}" target="_blank"><i class="fab fa-youtube"></i></a>` : ''}
+  ${member.twitch ? `<a class="twitch" href="${member.twitch}" target="_blank"><i class="fab fa-twitch"></i></a>` : ''}
+  ${member.discord ? `<a class="discord" href="${member.discord}" target="_blank"><i class="fab fa-discord"></i></a>` : ''}
+  ${member.github ? `<a class="github" href="${member.github}" target="_blank"><i class="fab fa-github"></i></a>` : ''}
+</div>
             </div>
           `;
           grid.appendChild(card);
