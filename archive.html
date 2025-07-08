@@ -9,6 +9,29 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    :root {
+      --scale-factor: 1;
+    }
+
+    /* Scale up on larger screens */
+    @media (min-width: 769px) and (max-width: 1200px) {
+      :root {
+        --scale-factor: 1.1;
+      }
+    }
+
+    @media (min-width: 1201px) and (max-width: 1600px) {
+      :root {
+        --scale-factor: 1.25;
+      }
+    }
+
+    @media (min-width: 1601px) {
+      :root {
+        --scale-factor: 1.4;
+      }
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to top, #cc5500, #ff8c42);
@@ -16,6 +39,9 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
+      transform: scale(var(--scale-factor));
+      transform-origin: top center;
+      width: calc(100% / var(--scale-factor));
     }
 
     .floating-nav {
@@ -480,7 +506,17 @@
       margin-left: 8px;
     }
 
+    /* Mobile styles remain the same - scaling only affects larger screens */
     @media (max-width: 768px) {
+      :root {
+        --scale-factor: 1; /* No scaling on mobile */
+      }
+      
+      body {
+        transform: none;
+        width: 100%;
+      }
+      
       .card-top {
         flex-direction: column;
       }
@@ -503,41 +539,45 @@
       .carousel-nav.prev { left: -20px; }
       .carousel-nav.next { right: -20px; }
     }
+    
     .expandable-content strong {
-  font-weight: 10000;
-  color: #fff;
-}
-.expandable-content ul {
-  padding-left: 1.4em;
-  margin-bottom: 1em;
-  list-style-position: inside;
-}
+      font-weight: 10000;
+      color: #fff;
+    }
+    
+    .expandable-content ul {
+      padding-left: 1.4em;
+      margin-bottom: 1em;
+      list-style-position: inside;
+    }
 
-.expandable-content li {
-  margin-bottom: 0.4em;
-}
-.download-screens {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
+    .expandable-content li {
+      margin-bottom: 0.4em;
+    }
+    
+    .download-screens {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
 
-.download-screens img {
-  max-height: 120px;
-  border-radius: 10px;
-  object-fit: cover;
-  flex: 1;
-  min-width: 0;
-}
-blockquote {
-  border-left: 4px solid #888;
-  margin: 12px 0;
-  padding-left: 14px;
-  color: #ccc;
-  opacity: 0.85;
-  font-style: italic;
-}
+    .download-screens img {
+      max-height: 120px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex: 1;
+      min-width: 0;
+    }
+    
+    blockquote {
+      border-left: 4px solid #888;
+      margin: 12px 0;
+      padding-left: 14px;
+      color: #ccc;
+      opacity: 0.85;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
