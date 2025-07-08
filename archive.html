@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -9,562 +10,619 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    :root {
-      --scale-factor: 1;
-    }
-
-    /* Scale up on larger screens */
-    @media (min-width: 769px) and (max-width: 1200px) {
-      :root {
-        --scale-factor: 1.1;
-      }
-    }
-
-    @media (min-width: 1201px) and (max-width: 1600px) {
-      :root {
-        --scale-factor: 1.25;
-      }
-    }
-
-    @media (min-width: 1601px) {
-      :root {
-        --scale-factor: 1.4;
-      }
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to top, #cc5500, #ff8c42);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-      transform: scale(var(--scale-factor));
-      transform-origin: top center;
-      width: calc(100% / var(--scale-factor));
-    }
-
-    .floating-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      z-index: 999;
-      padding: 8px 0;
-    }
-
-    .floating-nav-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 10px;
-    }
-
-    .floating-nav-inner a {
-      flex: 1;
-      text-align: center;
-      color: #ddd;
-      text-decoration: none;
-      font-size: 13px;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 6px 0;
-      border-radius: 12px;
-      position: relative;
-    }
-
-    .floating-nav-inner a i {
-      font-size: 18px;
-    }
-
-    .floating-nav-inner a.active {
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    .floating-nav-inner a.active::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      left: 25%;
-      width: 50%;
-      height: 4px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .main-content {
-      flex: 1;
-      padding: 100px 20px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
-    }
-
-    .filter-bar {
-      position: relative;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 10px 20px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 960px;
-      z-index: 10000;
-    }
-
-    .filter-btn {
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 8px 16px;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .filter-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .filter-panel {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      margin-top: 8px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      padding: 16px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      color: white;
-      font-size: 0.9rem;
-      max-height: 300px;
-      overflow-y: auto;
-      width: 100%;
-    }
-
-    .filter-panel.hidden {
-      display: none;
-    }
-
-    .toggle-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 4px 0;
-      position: relative;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .toggle-container input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: relative;
-      width: 48px;
-      height: 24px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 999px;
-      transition: all 0.3s ease;
-      flex-shrink: 0;
-    }
-
-    .slider::before {
-      content: "";
-      position: absolute;
-      height: 20px;
-      width: 20px;
-      left: 2px;
-      top: 2px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-    }
-
-    .toggle-container input:checked + .slider {
-      background: rgba(0, 204, 102, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(0, 204, 102, 0.3);
-    }
-
-    .toggle-container input:checked + .slider::before {
-      transform: translateX(24px);
-      background: rgba(230, 255, 230, 0.8);
-    }
-
-    .toggle-label {
-      color: white;
-      font-size: 0.9rem;
-    }
-
-    .carousel-container {
-      position: relative;
-      width: 100%;
-      max-width: 960px;
-    }
-
-    .carousel-wrapper {
-      overflow: hidden;
-      border-radius: 30px;
-    }
-
-    .carousel-track {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
-
-    .card {
-      width: 100%;
-      flex-shrink: 0;
-      padding: 10px;
-      border-radius: 30px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .card-inner {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(15px);
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .card-top {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .image-wrapper {
-      aspect-ratio: 16 / 9;
-      flex-shrink: 0;
-      width: 100%;
-      max-width: 100%;
-      position: relative;
-    }
-
-    .image-wrapper img {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      height: 100%;
-      width: auto;
-      transform: translateX(-50%);
-      object-fit: cover;
-      z-index: 0;
-    }
-
-    .overlay {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      padding: 30px 20px 24px;
-      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-      z-index: 1;
-      text-align: center;
-      color: white;
-    }
-
-    .overlay .title {
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .overlay .subtitle {
-      font-size: 0.9rem;
-      opacity: 0.85;
-    }
-
-    .info-panel {
-      flex: 1;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: white;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      border-left: none;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .tag {
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      color: #eee;
-    }
-
-    .buttons {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .buttons button {
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      color: white;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .buttons button:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .expandable-wrapper {
-      overflow: hidden;
-      height: 0;
-      transition: height 0.4s ease;
-    }
-
-    .expandable-content {
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      color: #ccc;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .file-card {
-      display: flex;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 12px 16px;
-      border-radius: 16px;
-      margin-top: 10px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .file-card:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .file-icon {
-      width: 40px;
-      height: 40px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 12px;
-    }
-
-    .file-icon::before {
-      content: "≡";
-      font-size: 18px;
-      color: #aaa;
-    }
-
-    .file-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .file-name {
-      color: #00aaff;
-      font-weight: 600;
-      font-size: 15px;
-    }
-
-    .file-size {
-      color: #aaa;
-      font-size: 13px;
-    }
-
-    .carousel-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      color: white;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 10;
-    }
-
-    .carousel-nav:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-50%) scale(1.1);
-    }
-
-    .carousel-nav.prev { left: -25px; }
-    .carousel-nav.next { right: -25px; }
-
-    .carousel-dots {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .carousel-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .carousel-dot.active {
-      background: rgba(255, 255, 255, 0.8);
-      transform: scale(1.2);
-    }
-
-    .bottom-section {
-      margin-top: auto;
-    }
-
-    .bottom-line {
-      width: 100%;
-      height: 2px;
-      background: #000;
-    }
-
-    .bottom-info {
-      background: #333;
-      padding: 8px 20px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      min-height: 35px;
-      color: #ccc;
-      font-size: 12px;
-    }
-
-    #filter-indicator {
-      color: white;
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-left: 8px;
-    }
-
-    /* Mobile styles - same as base styles now */
-    @media (max-width: 768px) {
-      :root {
-        --scale-factor: 1; /* No scaling on mobile */
-      }
-      
-      body {
-        transform: none;
-        width: 100%;
-      }
-
-      .carousel-nav {
-        width: 40px;
-        height: 40px;
-      }
-
-      .carousel-nav.prev { left: -20px; }
-      .carousel-nav.next { right: -20px; }
-    }
-    
-    .expandable-content strong {
-      font-weight: 10000;
-      color: #fff;
-    }
-    
-    .expandable-content ul {
-      padding-left: 1.4em;
-      margin-bottom: 1em;
-      list-style-position: inside;
-    }
-
-    .expandable-content li {
-      margin-bottom: 0.4em;
-    }
-    
-    .download-screens {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .download-screens img {
-      max-height: 120px;
-      border-radius: 10px;
-      object-fit: cover;
-      flex: 1;
-      min-width: 0;
-    }
-    
-    blockquote {
-      border-left: 4px solid #888;
-      margin: 12px 0;
-      padding-left: 14px;
-      color: #ccc;
-      opacity: 0.85;
-      font-style: italic;
-    }
+```
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(to top, #cc5500, #ff8c42);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Background overlay to ensure coverage on all screen sizes */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, #cc5500, #ff8c42);
+  z-index: -1;
+}
+
+.floating-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 999;
+  padding: 8px 0;
+}
+
+.floating-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.floating-nav-inner a {
+  flex: 1;
+  text-align: center;
+  color: #ddd;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+  border-radius: 12px;
+  position: relative;
+}
+
+.floating-nav-inner a i {
+  font-size: 20px;
+}
+
+.floating-nav-inner a.active {
+  color: white;
+  transform: translateY(-2px);
+}
+
+.floating-nav-inner a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 25%;
+  width: 50%;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.main-content {
+  flex: 1;
+  padding: 120px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.filter-bar {
+  position: relative;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 24px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 1000px;
+  z-index: 10000;
+}
+
+.filter-btn {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 18px;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.filter-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+  font-size: 14px;
+  max-height: 300px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.filter-panel.hidden {
+  display: none;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-container input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: relative;
+  width: 52px;
+  height: 26px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 2px;
+  top: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.toggle-container input:checked + .slider {
+  background: rgba(0, 204, 102, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 204, 102, 0.3);
+}
+
+.toggle-container input:checked + .slider::before {
+  transform: translateX(26px);
+  background: rgba(230, 255, 230, 0.8);
+}
+
+.toggle-label {
+  color: white;
+  font-size: 14px;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.carousel-wrapper {
+  overflow: hidden;
+  border-radius: 30px;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.card {
+  width: 100%;
+  flex-shrink: 0;
+  padding: 12px;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card-inner {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card-top {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.image-wrapper {
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+.image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  width: auto;
+  transform: translateX(-50%);
+  object-fit: cover;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 35px 25px 28px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  z-index: 1;
+  text-align: center;
+  color: white;
+}
+
+.overlay .title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.overlay .subtitle {
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+.info-panel {
+  flex: 1;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: none;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: #eee;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.buttons button {
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.buttons button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.expandable-wrapper {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.4s ease;
+}
+
+.expandable-content {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 24px;
+  color: #ccc;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.file-card {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 14px 18px;
+  border-radius: 16px;
+  margin-top: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.file-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.file-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 14px;
+}
+
+.file-icon::before {
+  content: "≡";
+  font-size: 20px;
+  color: #aaa;
+}
+
+.file-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-name {
+  color: #00aaff;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.file-size {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: white;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.carousel-nav:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav.prev { left: -30px; }
+.carousel-nav.next { right: -30px; }
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.carousel-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.2);
+}
+
+.bottom-section {
+  margin-top: auto;
+}
+
+.bottom-line {
+  width: 100%;
+  height: 2px;
+  background: #000;
+}
+
+.bottom-info {
+  background: #333;
+  padding: 10px 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 40px;
+  color: #ccc;
+  font-size: 13px;
+}
+
+#filter-indicator {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.expandable-content strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+.expandable-content ul {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+  list-style-position: inside;
+}
+
+.expandable-content li {
+  margin-bottom: 0.5em;
+}
+
+.download-screens {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.download-screens img {
+  max-height: 140px;
+  width: auto;
+  border-radius: 10px;
+  object-fit: contain;
+  flex: 1;
+  min-width: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+blockquote {
+  border-left: 4px solid #888;
+  margin: 14px 0;
+  padding-left: 16px;
+  color: #ccc;
+  opacity: 0.85;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .floating-nav-inner {
+    padding: 0 15px;
+  }
+  
+  .floating-nav-inner a {
+    font-size: 12px;
+  }
+  
+  .floating-nav-inner a i {
+    font-size: 18px;
+  }
+  
+  .main-content {
+    padding: 100px 15px 30px;
+    gap: 30px;
+  }
+  
+  .filter-bar {
+    padding: 10px 18px;
+  }
+  
+  .filter-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+  
+  .overlay .title {
+    font-size: 1.4rem;
+  }
+  
+  .overlay .subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .info-panel {
+    padding: 20px;
+  }
+  
+  .buttons button {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  
+  .carousel-nav {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .carousel-nav.prev { left: -22px; }
+  .carousel-nav.next { right: -22px; }
+  
+  .download-screens img {
+    max-height: 120px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .main-content {
+    max-width: 1400px;
+    gap: 50px;
+  }
+  
+  .filter-bar {
+    max-width: 1200px;
+  }
+  
+  .carousel-container {
+    max-width: 1200px;
+  }
+}
+```
+
   </style>
 </head>
 <body>
@@ -585,14 +643,17 @@
       <div id="filter-panel" class="filter-panel hidden"></div>
     </div>
 
-    <div class="carousel-container">
-      <div class="carousel-wrapper">
-        <div class="carousel-track" id="carousel-track"></div>
-      </div>
-      <button class="carousel-nav prev" id="prev-btn"><i class="fa fa-chevron-left"></i></button>
-      <button class="carousel-nav next" id="next-btn"><i class="fa fa-chevron-right"></i></button>
-      <div class="carousel-dots" id="carousel-dots"></div>
-    </div>
+```
+<div class="carousel-container">
+  <div class="carousel-wrapper">
+    <div class="carousel-track" id="carousel-track"></div>
+  </div>
+  <button class="carousel-nav prev" id="prev-btn"><i class="fa fa-chevron-left"></i></button>
+  <button class="carousel-nav next" id="next-btn"><i class="fa fa-chevron-right"></i></button>
+  <div class="carousel-dots" id="carousel-dots"></div>
+</div>
+```
+
   </div>
 
   <div class="bottom-section">
@@ -705,11 +766,30 @@
   }
 
   async function loadCardsData() {
-    const res = await fetch("archive_data.json");
-    cardsData = await res.json();
-    console.log("Loaded cards:", cardsData); // Debug line
-    setupFilters(cardsData);
-    updateCarousel();
+    try {
+      const res = await fetch("archive_data.json");
+      cardsData = await res.json();
+      console.log("Loaded cards:", cardsData);
+      setupFilters(cardsData);
+      updateCarousel();
+    } catch (error) {
+      console.error("Error loading cards data:", error);
+      // Fallback with sample data for demonstration
+      cardsData = [
+        {
+          title: "Sample Card",
+          subtitle: "Demo content",
+          image: "https://via.placeholder.com/800x450/cc5500/ffffff?text=Sample+Image",
+          tags: ["Demo", "Sample"],
+          downloads: [
+            { name: "sample.zip", size: "1.2 MB", link: "#" }
+          ],
+          info: "This is a sample card for demonstration purposes."
+        }
+      ];
+      setupFilters(cardsData);
+      updateCarousel();
+    }
   }
 
   function setupFilters(data) {
@@ -760,7 +840,7 @@
 
   function filteredCards() {
     if (!activeFilter.length) return cardsData;
-    return cardsData.filter(card => activeFilter.every(tag => card.tags.includes(tag)));
+    return cardsData.filter(card => activeFilter.every(tag => (card.tags || []).includes(tag)));
   }
 
   function updateCarousel() {
@@ -820,7 +900,6 @@
     closeAllPanels();
     updateCarousel();
   };
-
   loadCardsData();
 </script>
 </body>
