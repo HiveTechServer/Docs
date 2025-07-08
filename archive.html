@@ -263,7 +263,7 @@
 
     .card-top {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       overflow: hidden;
     }
 
@@ -271,7 +271,7 @@
       aspect-ratio: 16 / 9;
       flex-shrink: 0;
       width: 100%;
-      max-width: 640px;
+      max-width: 100%;
       position: relative;
     }
 
@@ -317,7 +317,8 @@
       flex-direction: column;
       justify-content: space-between;
       color: white;
-      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-left: none;
     }
 
     .tags {
@@ -338,7 +339,7 @@
 
     .buttons {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 10px;
       margin-top: 20px;
     }
@@ -506,7 +507,7 @@
       margin-left: 8px;
     }
 
-    /* Mobile styles remain the same - scaling only affects larger screens */
+    /* Mobile styles - same as base styles now */
     @media (max-width: 768px) {
       :root {
         --scale-factor: 1; /* No scaling on mobile */
@@ -515,20 +516,6 @@
       body {
         transform: none;
         width: 100%;
-      }
-      
-      .card-top {
-        flex-direction: column;
-      }
-
-      .image-wrapper {
-        max-width: 100%;
-        width: 100%;
-      }
-
-      .buttons {
-        flex-direction: row;
-        gap: 10px;
       }
 
       .carousel-nav {
