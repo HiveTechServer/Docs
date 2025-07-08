@@ -4,12 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Server Updates</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-* {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,171 +14,72 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
-    .top-line {
+    .floating-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 2px;
-      background: #000;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      z-index: 999;
+      padding: 8px 0;
     }
 
-    .top-nav {
-      background: #333;
+    .floating-nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
       display: flex;
-      justify-content: flex-start;
-      align-items: stretch;
-      height: 35px;
-      position: relative;
+      justify-content: space-between;
+      padding: 0 10px;
     }
 
-    .nav-tab {
-      padding: 0 20px;
-      background: transparent;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 14px;
-      position: relative;
+    .floating-nav-inner a {
+      flex: 1;
+      text-align: center;
+      color: #ddd;
+      text-decoration: none;
+      font-size: 13px;
       transition: all 0.3s ease;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      height: 100%;
-      text-decoration: none;
+      gap: 4px;
+      padding: 6px 0;
+      border-radius: 12px;
+      position: relative;
     }
 
-    .nav-tab.active {
-      background: #ff8c42;
-      transform: translateY(3px);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    .floating-nav-inner a i {
+      font-size: 18px;
     }
 
-    .nav-tab:hover:not(.active) {
-      background: rgba(255, 140, 66, 0.3);
+    .floating-nav-inner a.active {
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .floating-nav-inner a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 25%;
+      width: 50%;
+      height: 4px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.15);
     }
 
     .main-content {
       flex: 1;
+      padding: 100px 20px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
       gap: 30px;
-    }
-
-    .logo-panel {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      width: 100%;
-      max-width: 500px;
-      text-align: center;
-    }
-
-    .logo-container {
-      position: relative;
-      display: inline-block;
-    }
-
-    .logo-background {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(8px);
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .logo-image {
-      width: 120px;
-      height: 120px;
-      border-radius: 12px;
-      object-fit: contain;
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .logo-placeholder {
-      width: 120px;
-      height: 120px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #333;
-      border: 2px dashed rgba(255, 255, 255, 0.4);
-    }
-
-    .buttons-panel {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 40px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 20px;
-      align-items: center;
-      justify-content: center;
-      overflow-x: auto;
-    }
-
-    .glass-button {
-      background: rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 20px;
-      color: white;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      width: 130px;
-      height: 130px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      white-space: nowrap;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-
-    .glass-button.active {
-      background: rgba(255, 140, 66, 0.4);
-      border-color: rgba(255, 140, 66, 0.6);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 140, 66, 0.3);
-    }
-
-    .glass-button:hover:not(.active) {
-      background: rgba(0, 0, 0, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .glass-button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .button-icon {
-      width: 30px;
-      height: 30px;
-      display: inline-block;
-      flex-shrink: 0;
     }
 
     .content-panel {
@@ -192,26 +90,86 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       width: 100%;
       max-width: 800px;
-      height: 320px;
-      padding: 0;
-      margin-top: 40px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.3s ease;
-      pointer-events: none;
+      padding: 20px;
+      color: white;
     }
 
-    .content-panel.visible {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+    .video-scroll-wrapper {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
       border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 100%;
+      max-width: 1000px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 20px;
+    }
+
+    .video-scroll-wrapper::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    .video-scroll-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+    }
+
+    .video-strip {
+      display: flex;
+      gap: 20px;
+      min-width: max-content;
+    }
+
+    .video-card {
+      width: 280px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .video-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .video-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+      border: none;
+    }
+
+    .video-info {
+      padding: 16px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .video-info h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .video-info p {
+      margin: 0;
+      font-size: 13px;
+      opacity: 0.85;
     }
 
     .bottom-section {
@@ -231,94 +189,68 @@
       justify-content: flex-end;
       align-items: center;
       min-height: 35px;
-    }
-
-    .info-text {
       color: #ccc;
       font-size: 12px;
     }
-
-    @media (max-width: 768px) {
-      .main-content {
-        padding: 20px 10px;
-        gap: 20px;
-      }
-      .logo-panel, .buttons-panel, .content-panel {
-        max-width: 100%;
-        padding: 20px;
-      }
-      .glass-button {
-        width: 110px;
-        height: 110px;
-        font-size: 14px;
-        padding: 15px;
-      }
-      .button-icon {
-        width: 24px;
-        height: 24px;
-      }
-      .logo-image, .logo-placeholder {
-        width: 100px;
-        height: 100px;
-      }
-      .nav-tab {
-        padding: 0 15px;
-        font-size: 12px;
-      }
-      .dropdown-content {
-        min-width: 150px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .glass-button {
-        width: 90px;
-        height: 90px;
-        font-size: 12px;
-        padding: 10px;
-      }
-      .button-icon {
-        width: 20px;
-        height: 20px;
-      }
-      .info-text {
-        font-size: 11px;
-      }
-      .logo-image, .logo-placeholder {
-        width: 80px;
-        height: 80px;
-      }
-      .nav-tab {
-        padding: 0 10px;
-        font-size: 11px;
-      }
-    }
-</style>
+  </style>
 </head>
 <body>
-  <div class="top-nav">
-  <a class="nav-tab" href="index.html">Home</a>
-  <a class="nav-tab" href="members.html">Meet the Members</a>
-  <a class="nav-tab" href="addons.html">Server Addons/Mods</a>
-  <a class="nav-tab active" href="updates.html">Server Updates</a>
-</div>
-<div class="top-line"></div>
-
+  <div class="floating-nav">
+    <div class="floating-nav-inner">
+      <a href="members.html"><i class="fas fa-users"></i><span>Members</span></a>
+      <a href="addons.html"><i class="fas fa-puzzle-piece"></i><span>Addons</span></a>
+      <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="updates.html" class="active"><i class="fas fa-bullhorn"></i><span>Updates</span></a>
+      <a href="archive.html"><i class="fas fa-archive"></i><span>Archive</span></a>
+    </div>
+  </div>
 
   <div class="main-content">
-    <div class="content-panel visible">
-      <div style="padding: 20px; color: white;">
-        <h2>Server Updates</h2>
-        <p>News and changelogs for the server updates will be listed here.</p>
-      </div>
+    <div class="content-panel">
+      <h2>Server Updates</h2>
+      <p>The server update videos can be found here along with progress updates on the SMP.</p>
+    </div>
+
+    <div class="video-scroll-wrapper">
+      <div class="video-strip" id="video-container"></div>
     </div>
   </div>
 
   <div class="bottom-section">
     <div class="bottom-line"></div>
     <div class="bottom-info">
-      <span class="info-text">An official HiveTech product</span>
+      An official HiveTech product
     </div>
   </div>
+
+  <script>
+    async function loadVideos() {
+      const container = document.getElementById('video-container');
+      const response = await fetch('yt_data.json');
+      const videos = await response.json();
+
+      videos.forEach(video => {
+        const videoId = new URL(video.link).searchParams.get("v");
+        const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+        const card = document.createElement('a');
+        card.href = video.link;
+        card.target = "_blank";
+        card.className = 'video-card';
+
+        card.innerHTML = `
+          <img src="${thumbnail}" alt="${video.title}">
+          <div class="video-info">
+            <h3>${video.title}</h3>
+            <p>${video.description}</p>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    loadVideos();
+  </script>
 </body>
 </html>

@@ -3,84 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Glassy Widget Grid + Filter</title>
+  <title>Server Addons/Mods</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(to top, #cc5500, #ff8c42);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    .top-nav {
-      display: flex;
-      overflow-x: auto;
-      white-space: nowrap;
-      padding: 10px 16px;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      position: sticky;
+    .floating-nav {
+      position: fixed;
       top: 0;
-      z-index: 100;
-      border-radius: 0 0 20px 20px;
-      scrollbar-width: none;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      z-index: 999;
+      padding: 8px 0;
     }
 
-    .top-nav::-webkit-scrollbar { display: none; }
+    .floating-nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 10px;
+    }
 
-    .nav-tab {
-      flex: 0 0 auto;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 8px 16px;
-      color: white;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
+    .floating-nav-inner a {
+      flex: 1;
+      text-align: center;
+      color: #ddd;
       text-decoration: none;
-      backdrop-filter: blur(12px);
+      font-size: 13px;
       transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 0;
+      border-radius: 12px;
+      position: relative;
     }
 
-    .nav-tab:hover {
-      background: rgba(0, 0, 0, 0.6);
+    .floating-nav-inner a i {
+      font-size: 18px;
+    }
+
+    .floating-nav-inner a.active {
+      color: white;
       transform: translateY(-2px);
     }
 
-    .nav-tab.active {
-      background: rgba(255, 255, 255, 0.5);
-      border-color: rgba(255, 255, 255, 0.4);
-      color: #222;
-    }
-
-    .bottom-info {
-      margin-top: auto;
-      padding: 12px 20px;
-      font-size: 12px;
-      color: #fff;
-      text-align: right;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
+    .floating-nav-inner a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 25%;
+      width: 50%;
+      height: 4px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.15);
     }
 
     .filter-bar {
+      margin-top: 120px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 10px;
-      margin: 30px auto 10px;
-      padding: 16px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(14px);
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
       border-radius: 20px;
       max-width: 620px;
+      margin-left: auto;
+      margin-right: auto;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
     }
 
@@ -138,8 +142,7 @@
       gap: 20px;
       justify-content: center;
       max-width: 600px;
-      margin: 20px auto 40px;
-      transform-origin: top center;
+      margin: 40px auto 60px;
     }
 
     .widget {
@@ -152,19 +155,6 @@
       backdrop-filter: blur(20px);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.4s ease, opacity 0.3s ease;
-      opacity: 0;
-      animation: fadeIn 0.4s forwards;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    .widget:hover {
-      transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .widget img {
@@ -212,63 +202,39 @@
     .tag.resources  { color: #ff8c00; border-color: #ff8c00; }
     .tag.mods       { color: #ffff00; border-color: #ffff00; }
 
-    .bottom-section-widget {
-      position: absolute;
-      bottom: 16px;
-      left: 20px;
-      right: 20px;
-      z-index: 10;
+    .bottom-section {
+      margin-top: auto;
     }
 
-    .info {
-      margin-bottom: 12px;
-      text-align: center;
-    }
-
-    .name {
-      font-size: 18px;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 4px;
-    }
-
-    .dev-name {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .download-btn {
+    .bottom-line {
       width: 100%;
-      padding: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #000;
-      background: #ccc;
-      border-radius: 12px;
-      text-align: center;
-      text-decoration: none;
-      display: block;
+      height: 2px;
+      background: #000;
     }
 
-    .download-btn:hover {
-      background: #aaa;
+    .bottom-info {
+      background: #333;
+      padding: 8px 20px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      min-height: 35px;
+      color: #ccc;
+      font-size: 12px;
     }
-
-    @media (max-width: 600px) { .container { transform: scale(0.85); } }
-    @media (max-width: 480px) { .container { transform: scale(0.7); } }
-    @media (max-width: 380px) { .container { transform: scale(0.6); } }
   </style>
 </head>
 <body>
-
-  <div class="top-nav">
-    <a class="nav-tab" href="index.html">Home</a>
-    <a class="nav-tab" href="members.html">Meet the Members</a>
-    <a class="nav-tab active" href="addons.html">Server Addons/Mods</a>
-    <a class="nav-tab" href="updates.html">Server Updates</a>
+  <div class="floating-nav">
+    <div class="floating-nav-inner">
+      <a href="members.html"><i class="fas fa-users"></i><span>Members</span></a>
+      <a href="addons.html" class="active"><i class="fas fa-puzzle-piece"></i><span>Addons</span></a>
+      <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="updates.html"><i class="fas fa-bullhorn"></i><span>Updates</span></a>
+      <a href="archive.html"><i class="fas fa-archive"></i><span>Archive</span></a>
+    </div>
   </div>
-
-  <div class="filter-bar">
+    <div class="filter-bar">
     <button class="select-toggle-btn">Select All</button>
     <div class="filter-buttons">
       <button class="filter-btn cmp" data-tag="cmp">CMP</button>
@@ -281,7 +247,10 @@
 
   <div id="widget-container" class="container"></div>
 
-  <div class="bottom-info">An official HiveTech product</div>
+  <div class="bottom-section">
+    <div class="bottom-line"></div>
+    <div class="bottom-info">An official HiveTech product</div>
+  </div>
 
   <script>
     const container = document.getElementById("widget-container");
@@ -309,12 +278,13 @@
             <img src="${widget.image}" alt="${widget.name}">
             <div class="overlay"></div>
             <div class="tags">${tags}</div>
-            <div class="bottom-section-widget">
-              <div class="info">
-                <div class="name">${widget.name}</div>
-                <div class="dev-name">Created by: ${widget.creator}</div>
+            <div class="bottom-section-widget" style="position:absolute;bottom:16px;left:20px;right:20px;z-index:10;">
+              <div class="info" style="text-align:center;margin-bottom:12px;">
+                <div class="name" style="font-size:18px;font-weight:700;color:white;">${widget.name}</div>
+                <div class="dev-name" style="font-size:12px;color:rgba(255,255,255,0.9);">Created by: ${widget.creator}</div>
               </div>
-              <a class="download-btn" href="${githubLink}" target="_blank">
+              <a class="download-btn" href="${githubLink}" target="_blank"
+                 style="display:block;width:100%;padding:12px;font-size:14px;font-weight:600;text-align:center;background:#ccc;border-radius:12px;color:#000;text-decoration:none;">
                 Download
               </a>
             </div>
