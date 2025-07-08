@@ -621,7 +621,47 @@ blockquote {
     max-width: 1200px;
   }
 }
-```
+  .loading-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.shimmer-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 20px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-bottom: 24px;
+}
+
+.shimmer-text {
+  height: 20px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin: 8px auto;
+}
+
+.shimmer-text.title {
+  width: 60%;
+  height: 24px;
+}
+
+.shimmer-text.subtitle {
+  width: 40%;
+  height: 18px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
 
   </style>
 </head>
@@ -764,29 +804,29 @@ blockquote {
         </div>
       </div>`;
   }
-
+  function showLoadingCard() {
+  const track = document.getElementById("carousel-track");
+  const dots = document.getElementById("carousel-dots");
+  track.innerHTML = `
+    <div class="card loading-card">
+      <div class="card-inner">
+        <div class="shimmer-image"></div>
+        <div class="shimmer-text title"></div>
+        <div class="shimmer-text subtitle"></div>
+      </div>
+    </div>`;
+  dots.innerHTML = '';
+}
   async function loadCardsData() {
-    try {
-      const res = await fetch("archive_data.json");
-      cardsData = await res.json();
-      console.log("Loaded cards:", cardsData);
-      setupFilters(cardsData);
-      updateCarousel();
-    } catch (error) {
-      console.error("Error loading cards data:", error);
-      // Fallback with sample data for demonstration
-      cardsData = [
-        {
-          title: "Sample Card",
-          subtitle: "Demo content",
-          image: "https://via.placeholder.com/800x450/cc5500/ffffff?text=Sample+Image",
-          tags: ["Demo", "Sample"],
-          downloads: [
-            { name: "sample.zip", size: "1.2 MB", link: "#" }
-          ],
-          info: "This is a sample card for demonstration purposes."
-        }
-      ];
+  showLoadingCard(); // ← Add this line first
+  try {
+    const res = await fetch("archive_data.json");
+    cardsData = await res.json();
+    console.log("Loaded cards:", cardsData);
+    setupFilters(cardsData);
+    updateCarousel();
+  } catch (error) {
+    console.error("Error loading cards data:", error);
       setupFilters(cardsData);
       updateCarousel();
     }
