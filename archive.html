@@ -881,51 +881,70 @@
             return html;
         }
 
-function createCard(data, index) {
-    const isPack = (data.type || 'build') === 'pack';
-    const cardId = `${isPack ? 'pack' : 'build'}-${index}`;
-    return `
-        <div class="card ${isPack ? 'card-pack': ''}" data-index="${cardId}">
+        function createCard(data, index) {
+            const isPack = (data.type || 'build') === 'pack';
+            const cardId = `${isPack ? 'pack': 'build'}-${index}`;
+            return `
+            <div class="card ${isPack ? 'card-pack': ''}" data-index="${cardId}">
             <div class="card-inner">
-                <div class="card-top">
-                    <div class="image-wrapper ${isPack ? 'square': ''}">
-                        <img src="${data.image}" loading="lazy" decoding="async" />
-                        <div class="overlay">
-                            <div class="title">${data.title}</div>
-                            <div class="subtitle">${data.subtitle}</div>
-                        </div>
-                    </div>
-                    <div class="info-panel">
-                        <div class="tags">${(data.tags || []).map(tag => `<div class="tag">${tag}</div>`).join('')}</div>
-                        <div class="buttons">
-                            <button class="toggle-download" data-card="${cardId}"><i class="fa fa-download"></i> Download</button>
-                            <button class="toggle-info" data-card="${cardId}"><i class="fa fa-circle-info"></i> More Info</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="expandable-wrapper download-wrapper" data-card="${cardId}">
-                    <div class="expandable-content">
-                        ${data.downloads.map(file => `
-                            <a href="${file.link}" class="file-card" download>
-                                <div class="file-icon"></div>
-                                <div class="file-info">
-                                    <div class="file-name">${file.name}</div>
-                                    <div class="file-size">${file.size}</div>
-                                </div>
-                            </a>
-                            ${file.screenshots && file.screenshots.length ? `
-                            <div class="download-screens">
-                                ${file.screenshots.map(img => `<img src="${img}" loading="lazy" decoding="async" alt="screenshot" />`).join('')}
-                            </div>` : ''}
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="expandable-wrapper info-wrapper" data-card="${cardId}">
-                    <div class="expandable-content">${renderMarkdown(data.info || '')}</div>
-                </div>
+            <div class="card-top">
+            <div class="image-wrapper ${isPack ? 'square': ''}">
+            <img src="${data.image}" loading="lazy" decoding="async" />
+            <div class="overlay">
+            <div class="title">${data.title}</div>
+            <div class="subtitle">${data.subtitle}</div>
             </div>
-        </div>`;
-}
+            </div>
+            <div class="info-panel">
+            <div class="tags">${(data.tags || []).map(tag => `<div class="tag">${tag}</div>`).join('')}</div>
+            <div class="buttons">
+            <button class="toggle-download"><i class="fa fa-download"></i> Download</button>
+            <button class="toggle-info"><i class="fa fa-circle-info"></i> More Info</button>
+            </div>
+            </div>
+            </div>
+            <div class="expandable-wrapper download-wrapper">
+            <div class="expandable-content">
+            ${data.downloads.map(file => `
+                <a href="${file.link}" class="file-card" download>
+                <div class="file-icon"></div>
+                <div class="file-info">
+                <div class="file-name">${file.name}</div>
+                <div class="file-size">${file.size}</div>
+                </div>
+                </a>
+                ${file.screenshots && file.screenshots.length ? `
+                <div class="download-screens">
+                ${file.screenshots.map(img => `<img src="${img}" loading="lazy" decoding="async" alt="screenshot" />`).join('')}
+                </div>`: ''}
+                `).join('')}
+            </div>
+            </div>
+            <div class="expandable-wrapper info-wrapper">
+            <div class="expandable-content">${renderMarkdown(data.info || '')}</div>
+            </div>
+            </div>
+            </div>`;
+        }
+
+        function bindToggleButtons() {
+            document.querySelectorAll('.toggle-download').forEach(btn =>
+                btn.onclick = e => togglePanel(e, 'download')
+            );
+            document.querySelectorAll('.toggle-info').forEach(btn =>
+                btn.onclick = e => togglePanel(e, 'info')
+            );
+        }
+
+        function togglePanel(e, type) {
+            const card = e.currentTarget.closest('.card');
+            const panel = card.querySelector(`.${type}-wrapper`);
+            const other = card.querySelector(`.${type === 'download' ? 'info': 'download'}-wrapper`);
+
+            if (other) other.style.height = '0px';
+            const isOpen = panel.style.height && panel.style.height !== '0px';
+            panel.style.height = isOpen ? '0px': `${panel.querySelector('.expandable-content').scrollHeight}px`;
+        }
 
         function showLoadingCard() {
             document.getElementById("track-builds").innerHTML = `
@@ -954,6 +973,48 @@ function createCard(data, index) {
             }
         }
 
+        function filteredByType(type) {
+            const base = activeFilter.length
+            ? cardsData.filter(c => activeFilter.every(t => (c.tags || []).includes(t))): cardsData;
+            return base.filter(c => (c.type || "build") === type);
+        }
+
+        function renderCarousel(type, slide, trackId, dotsId) {
+            const cards = filteredByType(type);
+            const track = document.getElementById(trackId);
+            const dots = document.getElementById(dotsId);
+
+            if (!cards.length) {
+                track.innerHTML = '<div class="card"><div class="card-inner"><div style="padding: 40px; color:white; text-align:center;">No cards found.</div></div></div>';
+                dots.innerHTML = '';
+                return;
+            }
+
+            const visibleCards = cards.filter((_, i) => Math.abs(i - slide) <= 1);
+            track.innerHTML = visibleCards.map(c => {
+                const index = cardsData.indexOf(c);
+                return createCard(c, index);
+            }).join('');
+            dots.innerHTML = cards.map((_, i) =>
+                `<div class="carousel-dot ${i === slide ? 'active': ''}" data-slide="${i}"></div>`
+            ).join('');
+
+            bindToggleButtons();
+
+            const activeSlide = type === 'build' ? slideBuild: slidePack;
+            track.style.transform = `translateX(-${activeSlide * 100}%)`;
+            document.getElementById(`prev-${type}`).disabled = activeSlide === 0;
+            document.getElementById(`next-${type}`).disabled = activeSlide === cards.length - 1;
+
+            document.querySelectorAll(`#${dotsId} .carousel-dot`).forEach(dot =>
+                dot.onclick = e => {
+                    if (type === 'build') slideBuild = parseInt(e.target.dataset.slide);
+                    else slidePack = parseInt(e.target.dataset.slide);
+                    closeAllPanels();
+                    updateCarousels();
+                });
+        }
+
         function setupFilters(data) {
             const allTags = [...new Set(data.flatMap(c => c.tags || []))].sort();
             const panel = document.getElementById("filter-panel");
@@ -980,71 +1041,28 @@ function createCard(data, index) {
                 panel.appendChild(wrapper);
             });
 
-            panel.addEventListener("change", () => {
-                const selected = [...panel.querySelectorAll("input:checked")].map(c => c.value);
-                activeFilter = selected;
-                slideBuild = 0;
-                slidePack = 0;
-                document.getElementById("filter-indicator").style.display = selected.length ? "inline": "none";
-                updateCarousels();
-            });
-
-            document.getElementById("filter-toggle").addEventListener("click", () => {
-                panel.classList.toggle("hidden");
-            });
-
-            document.addEventListener("click", (e) => {
-                const btn = document.getElementById("filter-toggle");
-                if (!panel.contains(e.target) && !btn.contains(e.target)) {
-                    panel.classList.add("hidden");
-                }
-            });
-        }
-
-        function filteredByType(type) {
-            const base = activeFilter.length
-            ? cardsData.filter(c => activeFilter.every(t => (c.tags || []).includes(t))): cardsData;
-            return base.filter(c => (c.type || "build") === type);
-        }
-
-        function renderCarousel(type, slide, trackId, dotsId) {
-            const cards = filteredByType(type);
-            const track = document.getElementById(trackId);
-            const dots = document.getElementById(dotsId);
-
-            if (!cards.length) {
-                track.innerHTML = '<div class="card"><div class="card-inner"><div style="padding: 40px; color:white; text-align:center;">No cards found.</div></div></div>';
-                dots.innerHTML = '';
-                return;
-            }
-
-            const visibleCards = cards.filter((_, i) => Math.abs(i - slide) <= 1);
-            track.innerHTML = visibleCards.map(c => {
-    const index = cardsData.indexOf(c); // absolute index in full dataset
-    return createCard(c, index);
-}).join('');
-            dots.innerHTML = cards.map((_, i) =>
-                `<div class="carousel-dot ${i === slide ? 'active': ''}" data-slide="${i}"></div>`
-            ).join('');
-
-            document.querySelectorAll('.toggle-download').forEach(btn =>
-                btn.addEventListener('click', e => togglePanel(e, 'download'))
-            );
-            document.querySelectorAll('.toggle-info').forEach(btn =>
-                btn.addEventListener('click', e => togglePanel(e, 'info'))
-            );
-            document.querySelectorAll(`#${dotsId} .carousel-dot`).forEach(dot =>
-                dot.onclick = e => {
-                    if (type === 'build') slideBuild = parseInt(e.target.dataset.slide);
-                    else slidePack = parseInt(e.target.dataset.slide);
-                    closeAllPanels();
+            panel.addEventListener("change",
+                () => {
+                    const selected = [...panel.querySelectorAll("input:checked")].map(c => c.value);
+                    activeFilter = selected;
+                    slideBuild = 0;
+                    slidePack = 0;
+                    document.getElementById("filter-indicator").style.display = selected.length ? "inline": "none";
                     updateCarousels();
                 });
 
-            const activeSlide = type === 'build' ? slideBuild: slidePack;
-            track.style.transform = `translateX(-${activeSlide * 100}%)`;
-            document.getElementById(`prev-${type}`).disabled = activeSlide === 0;
-            document.getElementById(`next-${type}`).disabled = activeSlide === cards.length - 1;
+            document.getElementById("filter-toggle").addEventListener("click",
+                () => {
+                    panel.classList.toggle("hidden");
+                });
+
+            document.addEventListener("click",
+                (e) => {
+                    const btn = document.getElementById("filter-toggle");
+                    if (!panel.contains(e.target) && !btn.contains(e.target)) {
+                        panel.classList.add("hidden");
+                    }
+                });
         }
 
         function updateCarousels() {
@@ -1058,21 +1076,10 @@ function createCard(data, index) {
                 'dots-pack');
         }
 
-        function togglePanel(e, type) {
-    const card = e.currentTarget.closest('.card');
-const panel = card.querySelector(`.${type}-wrapper`);
-const other = card.querySelector(`.${type === 'download' ? 'info' : 'download'}-wrapper`);
-    if (other) other.style.height = '0px';
-
-    const isOpen = panel.style.height !== '0px' && panel.style.height !== '';
-    panel.style.height = isOpen ? '0px' : `${panel.querySelector('.expandable-content').scrollHeight}px`;
-}
-
         function closeAllPanels() {
             document.querySelectorAll('.expandable-wrapper').forEach(p => p.style.height = '0px');
         }
 
-        // Carousel navigation
         document.getElementById('prev-build').onclick = () => {
             if (slideBuild > 0) slideBuild--;
             closeAllPanels();
@@ -1095,13 +1102,10 @@ const other = card.querySelector(`.${type === 'download' ? 'info' : 'download'}-
         };
 
         loadCardsData();
+
         const filterBar = document.querySelector('.filter-bar');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 60) {
-                filterBar.classList.add('stuck');
-            } else {
-                filterBar.classList.remove('stuck');
-            }
+            filterBar.classList.toggle('stuck', window.scrollY > 60);
         });
     </script>
 </body>
