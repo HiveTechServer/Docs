@@ -1,6 +1,6 @@
 [
   {
-    "type": "builds",
+    "type": "build",
     "title": "Faceless",
     "subtitle": "by: Citrus",
     "image": "https://raw.githubusercontent.com/HiveTechServer/Docs/main/area_render_107_.png",
@@ -15,7 +15,7 @@
     "info": "# Faceless Storage\nby Citrus\n\n## Description\nThis is a storage that has no observers! It contains a MIS and bulk for your common items.\n\n## Credits\n- Render by: Cina\n- Cart yeeter by: FireBee\n- MIS slice by: Xeno\n\n### Extra\n> Downloadable as .mcworld"
   },
   {
-  "type": "builds",
+  "type": "build",
   "title": "Splitters (FIT/Normal)",
   "subtitle": "by: Firebee",
   "image": "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render_207_.png",
