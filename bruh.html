@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HT Archive - Filtered Carousel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to top, #cc5500, #ff8c42);
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Background overlay to ensure coverage on all screen sizes */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, #cc5500, #ff8c42);
+            z-index: -1;
+        }
+
+        .floating-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 999;
+            padding: 8px 0;
+        }
+
+        .floating-nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .floating-nav-inner a {
+            flex: 1;
+            text-align: center;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .floating-nav-inner a i {
+            font-size: 20px;
+        }
+
+        .floating-nav-inner a.active {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .floating-nav-inner a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 25%;
+            width: 50%;
+            height: 4px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 120px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .filter-bar {
+            position: sticky;
+            top: 64px;
+            /* height of your nav bar */
+            z-index: 998;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 20px;
+        }
+        .filter-bar.stuck {
+            animation: fadeInSlide 0.4s ease forwards;
+        }
+
+@keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .filter-btn {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 18px;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-panel {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            color: white;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .filter-panel.hidden {
+            display: none;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 6px 0;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .toggle-container input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: relative;
+            width: 52px;
+            height: 26px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 22px;
+            width: 22px;
+            left: 2px;
+            top: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .toggle-container input:checked + .slider {
+            background: rgba(0, 204, 102, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 204, 102, 0.3);
+        }
+
+        .toggle-container input:checked + .slider::before {
+            transform: translateX(26px);
+            background: rgba(230, 255, 230, 0.8);
+        }
+
+        .toggle-label {
+            color: white;
+            font-size: 14px;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .carousel-wrapper {
+            overflow: hidden;
+            border-radius: 30px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .card {
+            width: 100%;
+            flex-shrink: 0;
+            padding: 12px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-inner {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-top {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .image-wrapper {
+            aspect-ratio: 16 / 9;
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 100%;
+            position: relative;
+        }
+
+        .image-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            height: 100%;
+            width: auto;
+            transform: translateX(-50%);
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 35px 25px 28px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .overlay .title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .overlay .subtitle {
+            font-size: 1rem;
+            opacity: 0.85;
+        }
+
+        .info-panel {
+            flex: 1;
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: white;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: none;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            color: #eee;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .buttons button {
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buttons button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .expandable-wrapper {
+            overflow: hidden;
+            height: 0;
+            transition: height 0.4s ease;
+        }
+
+        .expandable-content {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 24px;
+            color: #ccc;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .file-card {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px 18px;
+            border-radius: 16px;
+            margin-top: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .file-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .file-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+        }
+
+        .file-icon::before {
+            content: "≡";
+            font-size: 20px;
+            color: #aaa;
+        }
+
+        .file-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-name {
+            color: #00aaff;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .file-size {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev {
+            left: -30px;
+        }
+        .carousel-nav.next {
+            right: -30px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .carousel-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.2);
+        }
+
+        .bottom-section {
+            margin-top: auto;
+        }
+
+        .bottom-line {
+            width: 100%;
+            height: 2px;
+            background: #000;
+        }
+
+        .bottom-info {
+            background: #333;
+            padding: 10px 24px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 40px;
+            color: #ccc;
+            font-size: 13px;
+        }
+
+        #filter-indicator {
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .expandable-content strong {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .expandable-content ul {
+            padding-left: 1.5em;
+            margin-bottom: 1em;
+            list-style-position: inside;
+        }
+
+        .expandable-content li {
+            margin-bottom: 0.5em;
+        }
+
+        .download-screens {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .download-screens img {
+            max-height: 140px;
+            width: auto;
+            border-radius: 10px;
+            object-fit: contain;
+            flex: 1;
+            min-width: 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        blockquote {
+            border-left: 4px solid #888;
+            margin: 14px 0;
+            padding-left: 16px;
+            color: #ccc;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        /* Responsive adjustments */
+@media (max-width: 768px) {
+            .floating-nav-inner {
+                padding: 0 15px;
+            }
+
+            .floating-nav-inner a {
+                font-size: 12px;
+            }
+
+            .floating-nav-inner a i {
+                font-size: 18px;
+            }
+
+            .main-content {
+                padding: 100px 15px 30px;
+                gap: 30px;
+            }
+
+            .filter-bar {
+                padding: 10px 18px;
+            }
+
+            .filter-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .overlay .title {
+                font-size: 1.4rem;
+            }
+
+            .overlay .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .info-panel {
+                padding: 20px;
+            }
+
+            .buttons button {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+
+            .carousel-nav {
+                width: 45px;
+                height: 45px;
+            }
+
+            .carousel-nav.prev {
+                left: -22px;
+            }
+            .carousel-nav.next {
+                right: -22px;
+            }
+
+            .download-screens img {
+                max-height: 120px;
+            }
+        }
+
+@media (min-width: 1400px) {
+            .main-content {
+                max-width: 1400px;
+                gap: 50px;
+            }
+
+            .filter-bar {
+                max-width: 1200px;
+            }
+
+            .carousel-container {
+                max-width: 1200px;
+            }
+        }
+        .loading-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .shimmer-image {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 20px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            margin-bottom: 24px;
+        }
+
+        .shimmer-text {
+            height: 20px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            margin: 8px auto;
+        }
+
+        .shimmer-text.title {
+            width: 60%;
+            height: 24px;
+        }
+
+        .shimmer-text.subtitle {
+            width: 40%;
+            height: 18px;
+        }
+
+@keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+        .image-wrapper.square {
+            aspect-ratio: 1 / 1;
+            height: auto;
+            width: 100%;
+        }
+
+        .image-wrapper.square img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+            left: 0;
+            transform: none;
+        }
+        .carousel-search {
+            width: 100%;
+            max-width: 1000px;
+            margin: 4px auto 10px;
+            /* This controls spacing above/below */
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            padding: 12px 18px;
+            font-size: 15px;
+            color: #fff;
+            outline: none;
+            width: 240px;
+        }
+
+        .search-bar button {
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            padding: 12px 14px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 999px 0 0 999px;
+        }
+
+        .search-bar button i {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-nav">
+        <div class="floating-nav-inner">
+            <a href="members.html"><i class="fas fa-users"></i><span>Members</span></a>
+            <a href="addons.html"><i class="fas fa-puzzle-piece"></i><span>Addons</span></a>
+            <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="updates.html"><i class="fas fa-bullhorn"></i><span>Updates</span></a>
+            <a href="archive.html" class="active"><i class="fas fa-archive"></i><span>Archive</span></a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="filter-bar">
+            <button id="filter-toggle" class="filter-btn"><i class="fa fa-filter"></i> Filters</button>
+            <span id="filter-indicator" style="display:none;">● Filters Active</span>
+            <div id="filter-panel" class="filter-panel hidden"></div>
+        </div>
+
+        <!-- BUILD SECTION -->
+        <h2 style="color:white; margin: 0px 0 0px;">Builds</h2>
+
+        <!-- Search for Builds -->
+        <div class="carousel-search">
+            <div class="search-bar">
+                <button><i class="fa fa-search"></i></button>
+                <input type="text" id="search-builds" placeholder="Search..." />
+            </div>
+        </div>
+
+        <div class="carousel-container" id="carousel-builds">
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="track-builds"></div>
+            </div>
+            <button class="carousel-nav prev" id="prev-build"><i class="fa fa-chevron-left"></i></button>
+            <button class="carousel-nav next" id="next-build"><i class="fa fa-chevron-right"></i></button>
+            <div class="carousel-dots" id="dots-build"></div>
+        </div>
+
+        <!-- PACK SECTION -->
+        <h2 style="color:white; margin: 0px 0 0px;">Packs</h2>
+
+        <!-- Search for Packs -->
+        <div class="carousel-search">
+            <div class="search-bar">
+                <button><i class="fa fa-search"></i></button>
+                <input type="text" id="search-packs" placeholder="Search..." />
+            </div>
+        </div>
+
+        <div class="carousel-container" id="carousel-packs">
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="track-packs"></div>
+            </div>
+            <button class="carousel-nav prev" id="prev-pack"><i class="fa fa-chevron-left"></i></button>
+            <button class="carousel-nav next" id="next-pack"><i class="fa fa-chevron-right"></i></button>
+            <div class="carousel-dots" id="dots-pack"></div>
+        </div>
+
+    </div>
+
+    <div class="bottom-section">
+        <div class="bottom-line"></div>
+        <div class="bottom-info">
+            An official HiveTech product
+        </div>
+    </div>
+
+    <script>
+        let cardsData = [], activeFilter = [];
+        let slideBuild = 0, slidePack = 0;
+
+        function renderMarkdown(text) {
+            const lines = text.split('\n');
+            let html = '';
+            let inList = false;
+
+            const applyInline = (str) => {
+                return str
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            };
+
+            for (let line of lines) {
+                line = line.trim();
+                if (line === '') continue;
+
+                if (line.startsWith('- ')) {
+                    if (!inList) {
+                        html += '<ul>';
+                        inList = true;
+                    }
+                    html += `<li>${applyInline(line.slice(2))}</li>`;
+                    continue;
+                }
+
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+
+                if (line.startsWith('### ')) {
+                    html += `<h3>${applyInline(line.slice(4))}</h3>`;
+                } else if (line.startsWith('## ')) {
+                    html += `<h2>${applyInline(line.slice(3))}</h2>`;
+                } else if (line.startsWith('# ')) {
+                    html += `<h1>${applyInline(line.slice(2))}</h1>`;
+                } else if (line.startsWith('> (')) {
+                    const match = line.match(/^> \((#[0-9a-fA-F]{3,6})\)\s*(.*)$/);
+                    if (match) {
+                        const [,
+                            color,
+                            content] = match;
+                        html += `<div style="border-left: 4px solid ${color}; padding-left: 12px; margin: 10px 0; color: ${color}; opacity: 0.8;">${applyInline(content)}</div>`;
+                    }
+                } else if (line.startsWith('> ')) {
+                    html += `<blockquote>${applyInline(line.slice(2))}</blockquote>`;
+                } else {
+                    html += `<p>${applyInline(line)}</p>`;
+                }
+            }
+
+            if (inList) html += '</ul>';
+            return html;
+        }
+
+        function createCard(data, index) {
+            const isPack = (data.type || 'build') === 'pack';
+            return `
+            <div class="card ${isPack ? 'card-pack': ''}" data-index="${index}">
+            <div class="card-inner">
+            <div class="card-top">
+            <div class="image-wrapper ${isPack ? 'square': ''}">
+            <img src="${data.image}" loading="lazy" decoding="async" />
+            <div class="overlay">
+            <div class="title">${data.title}</div>
+            <div class="subtitle">${data.subtitle}</div>
+            </div>
+            </div>
+            <div class="info-panel">
+            <div class="tags">${(data.tags || []).map(tag => `<div class="tag">${tag}</div>`).join('')}</div>
+            <div class="buttons">
+            <button class="toggle-download" data-card="${index}"><i class="fa fa-download"></i> Download</button>
+            <button class="toggle-info" data-card="${index}"><i class="fa fa-circle-info"></i> More Info</button>
+            </div>
+            </div>
+            </div>
+            <div class="expandable-wrapper download-wrapper" data-card="${index}">
+            <div class="expandable-content">
+            ${data.downloads.map(file => `
+                <a href="${file.link}" class="file-card" download>
+                <div class="file-icon"></div>
+                <div class="file-info">
+                <div class="file-name">${file.name}</div>
+                <div class="file-size">${file.size}</div>
+                </div>
+                </a>
+                ${file.screenshots && file.screenshots.length ? `
+                <div class="download-screens">
+                ${file.screenshots.map(img => `<img src="${data.image}" loading="lazy" decoding="async" alt="screenshot" />`).join('')}
+                </div>
+                `: ''}
+                `).join('')}
+            </div>
+            </div>
+            <div class="expandable-wrapper info-wrapper" data-card="${index}">
+            <div class="expandable-content">${renderMarkdown(data.info || '')}</div>
+            </div>
+            </div>
+            </div>`;
+        }
+
+        function showLoadingCard() {
+            document.getElementById("track-builds").innerHTML = `
+            <div class="card loading-card">
+            <div class="card-inner">
+            <div class="shimmer-image"></div>
+            <div class="shimmer-text title"></div>
+            <div class="shimmer-text subtitle"></div>
+            </div>
+            </div>`;
+            document.getElementById("dots-build").innerHTML = '';
+            document.getElementById("track-packs").innerHTML = '';
+            document.getElementById("dots-pack").innerHTML = '';
+        }
+
+        async function loadCardsData() {
+            showLoadingCard();
+            try {
+                const res = await fetch("archive_data.json");
+                cardsData = await res.json();
+                setupFilters(cardsData);
+                updateCarousels();
+            } catch (error) {
+                console.error("Error loading cards data:", error);
+                updateCarousels();
+            }
+        }
+
+        function setupFilters(data) {
+            const allTags = [...new Set(data.flatMap(c => c.tags || []))].sort();
+            const panel = document.getElementById("filter-panel");
+            panel.innerHTML = '';
+
+            allTags.forEach(tag => {
+                const wrapper = document.createElement("label");
+                wrapper.className = "toggle-container";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.value = tag;
+
+                const slider = document.createElement("span");
+                slider.className = "slider";
+
+                const labelText = document.createElement("span");
+                labelText.className = "toggle-label";
+                labelText.textContent = tag;
+
+                wrapper.appendChild(checkbox);
+                wrapper.appendChild(slider);
+                wrapper.appendChild(labelText);
+                panel.appendChild(wrapper);
+            });
+
+            panel.addEventListener("change", () => {
+                const selected = [...panel.querySelectorAll("input:checked")].map(c => c.value);
+                activeFilter = selected;
+                slideBuild = 0;
+                slidePack = 0;
+                document.getElementById("filter-indicator").style.display = selected.length ? "inline": "none";
+                updateCarousels();
+            });
+
+            document.getElementById("filter-toggle").addEventListener("click", () => {
+                panel.classList.toggle("hidden");
+            });
+
+            document.addEventListener("click", (e) => {
+                const btn = document.getElementById("filter-toggle");
+                if (!panel.contains(e.target) && !btn.contains(e.target)) {
+                    panel.classList.add("hidden");
+                }
+            });
+        }
+
+        function filteredByType(type) {
+            const base = activeFilter.length
+            ? cardsData.filter(c => activeFilter.every(t => (c.tags || []).includes(t))): cardsData;
+            return base.filter(c => (c.type || "build") === type);
+        }
+
+        function renderCarousel(type, slide, trackId, dotsId) {
+            const cards = filteredByType(type);
+            const track = document.getElementById(trackId);
+            const dots = document.getElementById(dotsId);
+
+            if (!cards.length) {
+                track.innerHTML = '<div class="card"><div class="card-inner"><div style="padding: 40px; color:white; text-align:center;">No cards found.</div></div></div>';
+                dots.innerHTML = '';
+                return;
+            }
+
+            const visibleCards = cards.filter((_, i) => Math.abs(i - slide) <= 1);
+            track.innerHTML = visibleCards.map((c, i) => createCard(c, slide - 1 + i)).join('');
+            dots.innerHTML = cards.map((_, i) =>
+                `<div class="carousel-dot ${i === slide ? 'active': ''}" data-slide="${i}"></div>`
+            ).join('');
+
+            document.querySelectorAll('.toggle-download').forEach(btn =>
+                btn.addEventListener('click', e => togglePanel(e, 'download'))
+            );
+            document.querySelectorAll('.toggle-info').forEach(btn =>
+                btn.addEventListener('click', e => togglePanel(e, 'info'))
+            );
+            document.querySelectorAll(`#${dotsId} .carousel-dot`).forEach(dot =>
+                dot.onclick = e => {
+                    if (type === 'build') slideBuild = parseInt(e.target.dataset.slide);
+                    else slidePack = parseInt(e.target.dataset.slide);
+                    closeAllPanels();
+                    updateCarousels();
+                });
+
+            const activeSlide = type === 'build' ? slideBuild: slidePack;
+            track.style.transform = `translateX(-${activeSlide * 100}%)`;
+            document.getElementById(`prev-${type}`).disabled = activeSlide === 0;
+            document.getElementById(`next-${type}`).disabled = activeSlide === cards.length - 1;
+        }
+
+        function updateCarousels() {
+            renderCarousel('build',
+                slideBuild,
+                'track-builds',
+                'dots-build');
+            renderCarousel('pack',
+                slidePack,
+                'track-packs',
+                'dots-pack');
+        }
+
+        function togglePanel(e, type) {
+            const index = e.currentTarget.dataset.card;
+            const panel = document.querySelector(`.${type}-wrapper[data-card="${index}"]`);
+            const other = document.querySelector(`.${type === 'download' ? 'info': 'download'}-wrapper[data-card="${index}"]`);
+            if (other) other.style.height = '0px';
+
+            const isOpen = panel.style.height !== '0px' && panel.style.height !== '';
+            panel.style.height = isOpen ? '0px': `${panel.querySelector('.expandable-content').scrollHeight}px`;
+        }
+
+        function closeAllPanels() {
+            document.querySelectorAll('.expandable-wrapper').forEach(p => p.style.height = '0px');
+        }
+
+        // Carousel navigation
+        document.getElementById('prev-build').onclick = () => {
+            if (slideBuild > 0) slideBuild--;
+            closeAllPanels();
+            updateCarousels();
+        };
+        document.getElementById('next-build').onclick = () => {
+            if (slideBuild < filteredByType('build').length - 1) slideBuild++;
+            closeAllPanels();
+            updateCarousels();
+        };
+        document.getElementById('prev-pack').onclick = () => {
+            if (slidePack > 0) slidePack--;
+            closeAllPanels();
+            updateCarousels();
+        };
+        document.getElementById('next-pack').onclick = () => {
+            if (slidePack < filteredByType('pack').length - 1) slidePack++;
+            closeAllPanels();
+            updateCarousels();
+        };
+
+        loadCardsData();
+        const filterBar = document.querySelector('.filter-bar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 60) {
+                filterBar.classList.add('stuck');
+            } else {
+                filterBar.classList.remove('stuck');
+            }
+        });
+    </script>
+</body>
+</html>
