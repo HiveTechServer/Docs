@@ -1019,7 +1019,10 @@ function createCard(data, index) {
             }
 
             const visibleCards = cards.filter((_, i) => Math.abs(i - slide) <= 1);
-            track.innerHTML = visibleCards.map((c, i) => createCard(c, slide - 1 + i)).join('');
+            track.innerHTML = visibleCards.map(c => {
+    const index = cardsData.indexOf(c); // absolute index in full dataset
+    return createCard(c, index);
+}).join('');
             dots.innerHTML = cards.map((_, i) =>
                 `<div class="carousel-dot ${i === slide ? 'active': ''}" data-slide="${i}"></div>`
             ).join('');
