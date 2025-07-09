@@ -881,51 +881,51 @@
             return html;
         }
 
-        function createCard(data, index) {
-            const isPack = (data.type || 'build') === 'pack';
-            return `
-            <div class="card ${isPack ? 'card-pack': ''}" data-index="${index}">
+function createCard(data, index) {
+    const isPack = (data.type || 'build') === 'pack';
+    const cardId = `${isPack ? 'pack' : 'build'}-${index}`;
+    return `
+        <div class="card ${isPack ? 'card-pack': ''}" data-index="${cardId}">
             <div class="card-inner">
-            <div class="card-top">
-            <div class="image-wrapper ${isPack ? 'square': ''}">
-            <img src="${data.image}" loading="lazy" decoding="async" />
-            <div class="overlay">
-            <div class="title">${data.title}</div>
-            <div class="subtitle">${data.subtitle}</div>
-            </div>
-            </div>
-            <div class="info-panel">
-            <div class="tags">${(data.tags || []).map(tag => `<div class="tag">${tag}</div>`).join('')}</div>
-            <div class="buttons">
-            <button class="toggle-download" data-card="${index}"><i class="fa fa-download"></i> Download</button>
-            <button class="toggle-info" data-card="${index}"><i class="fa fa-circle-info"></i> More Info</button>
-            </div>
-            </div>
-            </div>
-            <div class="expandable-wrapper download-wrapper" data-card="${index}">
-            <div class="expandable-content">
-            ${data.downloads.map(file => `
-                <a href="${file.link}" class="file-card" download>
-                <div class="file-icon"></div>
-                <div class="file-info">
-                <div class="file-name">${file.name}</div>
-                <div class="file-size">${file.size}</div>
+                <div class="card-top">
+                    <div class="image-wrapper ${isPack ? 'square': ''}">
+                        <img src="${data.image}" loading="lazy" decoding="async" />
+                        <div class="overlay">
+                            <div class="title">${data.title}</div>
+                            <div class="subtitle">${data.subtitle}</div>
+                        </div>
+                    </div>
+                    <div class="info-panel">
+                        <div class="tags">${(data.tags || []).map(tag => `<div class="tag">${tag}</div>`).join('')}</div>
+                        <div class="buttons">
+                            <button class="toggle-download" data-card="${cardId}"><i class="fa fa-download"></i> Download</button>
+                            <button class="toggle-info" data-card="${cardId}"><i class="fa fa-circle-info"></i> More Info</button>
+                        </div>
+                    </div>
                 </div>
-                </a>
-                ${file.screenshots && file.screenshots.length ? `
-                <div class="download-screens">
-                ${file.screenshots.map(img => `<img src="${data.image}" loading="lazy" decoding="async" alt="screenshot" />`).join('')}
+                <div class="expandable-wrapper download-wrapper" data-card="${cardId}">
+                    <div class="expandable-content">
+                        ${data.downloads.map(file => `
+                            <a href="${file.link}" class="file-card" download>
+                                <div class="file-icon"></div>
+                                <div class="file-info">
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-size">${file.size}</div>
+                                </div>
+                            </a>
+                            ${file.screenshots && file.screenshots.length ? `
+                            <div class="download-screens">
+                                ${file.screenshots.map(img => `<img src="${img}" loading="lazy" decoding="async" alt="screenshot" />`).join('')}
+                            </div>` : ''}
+                        `).join('')}
+                    </div>
                 </div>
-                `: ''}
-                `).join('')}
+                <div class="expandable-wrapper info-wrapper" data-card="${cardId}">
+                    <div class="expandable-content">${renderMarkdown(data.info || '')}</div>
+                </div>
             </div>
-            </div>
-            <div class="expandable-wrapper info-wrapper" data-card="${index}">
-            <div class="expandable-content">${renderMarkdown(data.info || '')}</div>
-            </div>
-            </div>
-            </div>`;
-        }
+        </div>`;
+}
 
         function showLoadingCard() {
             document.getElementById("track-builds").innerHTML = `
@@ -1056,14 +1056,14 @@
         }
 
         function togglePanel(e, type) {
-            const index = e.currentTarget.dataset.card;
-            const panel = document.querySelector(`.${type}-wrapper[data-card="${index}"]`);
-            const other = document.querySelector(`.${type === 'download' ? 'info': 'download'}-wrapper[data-card="${index}"]`);
-            if (other) other.style.height = '0px';
+    const cardId = e.currentTarget.dataset.card;
+    const panel = document.querySelector(`.${type}-wrapper[data-card="${cardId}"]`);
+    const other = document.querySelector(`.${type === 'download' ? 'info' : 'download'}-wrapper[data-card="${cardId}"]`);
+    if (other) other.style.height = '0px';
 
-            const isOpen = panel.style.height !== '0px' && panel.style.height !== '';
-            panel.style.height = isOpen ? '0px': `${panel.querySelector('.expandable-content').scrollHeight}px`;
-        }
+    const isOpen = panel.style.height !== '0px' && panel.style.height !== '';
+    panel.style.height = isOpen ? '0px' : `${panel.querySelector('.expandable-content').scrollHeight}px`;
+}
 
         function closeAllPanels() {
             document.querySelectorAll('.expandable-wrapper').forEach(p => p.style.height = '0px');
