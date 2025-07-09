@@ -15,48 +15,46 @@
     "info": "# Faceless Storage\nby Citrus\n\n## Description\nThis is a storage that has no observers! It contains a MIS and bulk for your common items.\n\n## Credits\n- Render by: Cina\n- Cart yeeter by: FireBee\n- MIS slice by: Xeno\n\n### Extra\n> Downloadable as .mcworld"
   },
   {
-  "type": "build",
-  "title": "Splitters (FIT/Normal)",
-  "subtitle": "by: Firebee",
-  "image": "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render_207_.png",
-  "tags": [
-    "Storage",
-    "WDL / Structure",
-    "Firebee"
-  ],
-  "downloads": [
-    {
-      "name": "FBFITsplitters.mcworld",
-      "size": "881.01KB",
-      "link": "https://cdn.discordapp.com/attachments/1319971205176098836/1319971604327039027/FBFITsplitters.mcworld?ex=686eea1a&is=686d989a&hm=4f6a681d038698e88c5689850cdf9fc968f32ba9ec8e3c2634a138b257a8dd4e&",
-      "screenshots": [
-        "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render.png",
-        "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render_225_.png"
-      ]
-    },
-    {
-      "name": "FBsplitters.mcworld",
-      "size": "866.24KB",
-      "link": "https://cdn.discordapp.com/attachments/1319971205176098836/1319971809122062356/FBsplitters.mcworld?ex=686eea4b&is=686d98cb&hm=36cd0d3870eea63c8dbb8692e29586bea3bec6a4bfcfb449b3110ceaa3e3912c&",
-      "screenshots": [
-        "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render_204_.png",
-        "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render_207_.png"
-      ]
-    }
-  ],
-  "info": "# Splitters (FIT/Normal)\nby: Firebee\n\n# Description\nThese are two splitter types! Both for different uses\n> FIT splitters take out the first item type found in the box and load a new box with those items. When that item type runs out both boxes are broke \n> Normal splitters unload the full box separating nonstackable items out before the box loader. They break the loader box when a new item type is detected and the unloader box is only broken once empty\n\n# Credits\n- Helped explain FIT logic: Prepusio\n\n# Extra\nBoth local and global clock versions of each type can be found in the WDLs"
-},
+    "type": "build",
+    "title": "Splitters (FIT/Normal)",
+    "subtitle": "by: Firebee",
+    "image": "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render_207_.png",
+    "tags": ["Storage", "WDL / Structure", "Firebee"],
+    "downloads": [
+      {
+        "name": "FBFITsplitters.mcworld",
+        "size": "881.01KB",
+        "link": "https://cdn.discordapp.com/attachments/1319971205176098836/1319971604327039027/FBFITsplitters.mcworld?ex=686eea1a&is=686d989a&hm=4f6a681d038698e88c5689850cdf9fc968f32ba9ec8e3c2634a138b257a8dd4e&",
+        "screenshots": [
+          "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render.png",
+          "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render_225_.png"
+        ]
+      },
+      {
+        "name": "FBsplitters.mcworld",
+        "size": "866.24KB",
+        "link": "https://cdn.discordapp.com/attachments/1319971205176098836/1319971809122062356/FBsplitters.mcworld?ex=686eea4b&is=686d98cb&hm=36cd0d3870eea63c8dbb8692e29586bea3bec6a4bfcfb449b3110ceaa3e3912c&",
+        "screenshots": [
+          "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render_204_.png",
+          "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/area_render_207_.png"
+        ]
+      }
+    ],
+    "info": "# Splitters (FIT/Normal)\nby: Firebee\n\n# Description\nThese are two splitter types! Both for different uses\n> FIT splitters take out the first item type found in the box and load a new box with those items. When that item type runs out both boxes are broke \n> Normal splitters unload the full box separating nonstackable items out before the box loader. They break the loader box when a new item type is detected and the unloader box is only broken once empty\n\n# Credits\n- Helped explain FIT logic: Prepusio\n\n# Extra\nBoth local and global clock versions of each type can be found in the WDLs"
+  },
   {
     "type": "pack",
     "title": "NoFog",
     "subtitle": "by: Nytreon",
     "image": "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/pack_icon.png",
     "info": "# NoFog\n**by: Nytreon**\n\n# Description\n> Simply removes nether fog",
-    "tags": ["Nytreon","Textures"],
+    "tags": ["Nytreon", "Textures"],
     "downloads": [
       {
         "name": "NoFog.mcpack",
         "link": "https://cdn.discordapp.com/attachments/1194301617130962964/1392528445694677122/NoFog.mcpack?ex=686fdcad&is=686e8b2d&hm=761d6974c816226f77a3150119e81bea08071ff0dab1dc31f5bf7f095d0d213b&",
         "size": "7.59KB"
       }
+    ]
+  }
 ]
