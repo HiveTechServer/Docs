@@ -45,5 +45,18 @@
     }
   ],
   "info": "# Splitters (FIT/Normal)\nby: Firebee\n\n# Description\nThese are two splitter types! Both for different uses\n> FIT splitters take out the first item type found in the box and load a new box with those items. When that item type runs out both boxes are broke \n> Normal splitters unload the full box separating nonstackable items out before the box loader. They break the loader box when a new item type is detected and the unloader box is only broken once empty\n\n# Credits\n- Helped explain FIT logic: Prepusio\n\n# Extra\nBoth local and global clock versions of each type can be found in the WDLs"
-}
+},
+  {
+    "type": "pack",
+    "title": "NoFog",
+    "subtitle": "by: Nytreon",
+    "image": "",
+    "info": "# NoFog\n**by: Nytreon**\n\n# Description\n> Simply removes nether fog",
+    "tags": ["Nytreon","Textures"],
+    "downloads": [
+      {
+        "name": "NoFog.mcpack",
+        "link": "https://cdn.discordapp.com/attachments/1194301617130962964/1392528445694677122/NoFog.mcpack?ex=686fdcad&is=686e8b2d&hm=761d6974c816226f77a3150119e81bea08071ff0dab1dc31f5bf7f095d0d213b&",
+        "size": "7.59KB"
+      }
 ]
