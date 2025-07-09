@@ -50,7 +50,7 @@
     "type": "pack",
     "title": "NoFog",
     "subtitle": "by: Nytreon",
-    "image": "",
+    "image": "https://raw.githubusercontent.com/HiveTechServer/Docs/main/Pics/pack_icon.png",
     "info": "# NoFog\n**by: Nytreon**\n\n# Description\n> Simply removes nether fog",
     "tags": ["Nytreon","Textures"],
     "downloads": [
