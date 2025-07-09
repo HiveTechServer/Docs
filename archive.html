@@ -1059,9 +1059,9 @@ function createCard(data, index) {
         }
 
         function togglePanel(e, type) {
-    const cardId = e.currentTarget.dataset.card;
-    const panel = document.querySelector(`.${type}-wrapper[data-card="${cardId}"]`);
-    const other = document.querySelector(`.${type === 'download' ? 'info' : 'download'}-wrapper[data-card="${cardId}"]`);
+    const card = e.currentTarget.closest('.card');
+const panel = card.querySelector(`.${type}-wrapper`);
+const other = card.querySelector(`.${type === 'download' ? 'info' : 'download'}-wrapper`);
     if (other) other.style.height = '0px';
 
     const isOpen = panel.style.height !== '0px' && panel.style.height !== '';
