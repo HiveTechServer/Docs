@@ -1,256 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Server Updates</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8" />
+    <title>HT Updates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to top, #cc5500, #ff8c42);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
 
-    .floating-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      z-index: 999;
-      padding: 8px 0;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to top, #cc5500, #ff8c42);
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
 
-    .floating-nav-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 10px;
-    }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, #cc5500, #ff8c42);
+            z-index: -1;
+        }
 
-    .floating-nav-inner a {
-      flex: 1;
-      text-align: center;
-      color: #ddd;
-      text-decoration: none;
-      font-size: 13px;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 6px 0;
-      border-radius: 12px;
-      position: relative;
-    }
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-    .floating-nav-inner a i {
-      font-size: 18px;
-    }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .floating-nav-inner a.active {
-      color: white;
-      transform: translateY(-2px);
-    }
+        .floating-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 999;
+            padding: 8px 0;
+        }
 
-    .floating-nav-inner a.active::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      left: 25%;
-      width: 50%;
-      height: 4px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.15);
-    }
+        .floating-nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
 
-    .main-content {
-      flex: 1;
-      padding: 100px 20px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
-    }
+        .floating-nav-inner a {
+            flex: 1;
+            text-align: center;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0;
+            border-radius: 12px;
+            position: relative;
+        }
 
-    .content-panel {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      width: 100%;
-      max-width: 800px;
-      padding: 20px;
-      color: white;
-    }
+        .floating-nav-inner a i {
+            font-size: 20px;
+        }
 
-    .video-scroll-wrapper {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      width: 100%;
-      max-width: 1000px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 20px;
-    }
+        .floating-nav-inner a.active {
+            color: white;
+            transform: translateY(-2px);
+        }
 
-    .video-scroll-wrapper::-webkit-scrollbar {
-      height: 10px;
-    }
+        .floating-nav-inner a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 25%;
+            width: 50%;
+            height: 4px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.15);
+        }
 
-    .video-scroll-wrapper::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 10px;
-    }
+        .intro-panel {
+            width: clamp(320px, 90vw, 640px);
+            margin: 120px auto 40px;
+            padding: 24px 28px;
+            border-radius: 24px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            color: white;
+            text-align: center;
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-    .video-strip {
-      display: flex;
-      gap: 20px;
-      min-width: max-content;
-    }
+        .intro-panel h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
 
-    .video-card {
-      width: 280px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.3s ease;
-      text-decoration: none;
-      color: inherit;
-    }
+        .intro-panel p {
+            font-size: 1rem;
+            opacity: 0.85;
+            line-height: 1.5;
+        }
 
-    .video-card:hover {
-      transform: translateY(-4px);
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
+        .updates-carousel {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 0 20px 40px;
+            align-items: flex-start;
+        }
 
-    .video-card img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      display: block;
-      border: none;
-    }
+        .updates-carousel::-webkit-scrollbar {
+            height: 8px;
+        }
 
-    .video-info {
-      padding: 16px;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+        .updates-carousel::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
 
-    .video-info h3 {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600;
-    }
+        .card {
+            flex: 0 0 320px;
+            scroll-snap-align: start;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid rgba(139, 69, 19, 0.8);
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            height: auto;
+        }
 
-    .video-info p {
-      margin: 0;
-      font-size: 13px;
-      opacity: 0.85;
-    }
+        .card:hover {
+            transform: scale(1.02);
+        }
 
-    .bottom-section {
-      margin-top: auto;
-    }
+        .card-top {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .bottom-line {
-      width: 100%;
-      height: 2px;
-      background: #000;
-    }
+        .card-top img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
 
-    .bottom-info {
-      background: #333;
-      padding: 8px 20px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      min-height: 35px;
-      color: #ccc;
-      font-size: 12px;
-    }
-  </style>
+        .card-content {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 16px 20px;
+            border-top: 1px solid rgba(139, 69, 19, 0.3);
+            border-radius: 0 0 22px 22px;
+        }
+
+        .card-content p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+        }
+
+        .bottom-section {
+            margin-top: auto;
+        }
+
+        .bottom-line {
+            width: 100%;
+            height: 2px;
+            background: #000;
+        }
+
+        .bottom-info {
+            background: #333;
+            padding: 10px 24px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 40px;
+            color: #ccc;
+            font-size: 13px;
+        }
+
+@media (max-width: 768px) {
+            .floating-nav-inner {
+                padding: 0 15px;
+            }
+
+            .floating-nav-inner a {
+                font-size: 12px;
+            }
+
+            .floating-nav-inner a i {
+                font-size: 18px;
+            }
+
+            .card {
+                flex: 0 0 90%;
+            }
+        }
+
+    </style>
 </head>
 <body>
-  <div class="floating-nav">
-    <div class="floating-nav-inner">
-      <a href="members.html"><i class="fas fa-users"></i><span>Members</span></a>
-      <a href="addons.html"><i class="fas fa-puzzle-piece"></i><span>Addons</span></a>
-      <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="updates.html" class="active"><i class="fas fa-bullhorn"></i><span>Updates</span></a>
-      <a href="archive.html"><i class="fas fa-archive"></i><span>Archive</span></a>
+    <div class="page-wrapper">
+
+        <div class="floating-nav">
+            <div class="floating-nav-inner">
+                <a href="members.html"><i class="fas fa-users"></i><span>Members</span></a>
+                <a href="addons.html"><i class="fas fa-puzzle-piece"></i><span>Addons</span></a>
+                <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+                <a href="updates.html" class="active"><i class="fas fa-bullhorn"></i><span>Updates</span></a>
+                <a href="archive.html"><i class="fas fa-archive"></i><span>Archive</span></a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="intro-panel">
+                <h1>HT Server Updates</h1>
+                <p>
+                    Latest HiveTech server updates can be found here! aswell as any important server updates
+                </p>
+            </div>
+
+            <div class="updates-carousel" id="updateCards">
+                <!-- Cards will be injected here -->
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <div class="bottom-line"></div>
+            <div class="bottom-info">
+                An official HiveTech product
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="main-content">
-    <div class="content-panel">
-      <h2>Server Updates</h2>
-      <p>The server update videos can be found here along with progress updates on the SMP.</p>
-    </div>
+    <script>
+        function extractYouTubeID(link) {
+            try {
+                const url = new URL(link);
+                if (url.hostname.includes("youtu.be")) return url.pathname.slice(1);
+                if (url.hostname.includes("youtube.com")) return url.searchParams.get("v");
+            } catch {
+                return "";
+            }
+        }
 
-    <div class="video-scroll-wrapper">
-      <div class="video-strip" id="video-container"></div>
-    </div>
-  </div>
+        fetch("yt_data.json")
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById("updateCards");
 
-  <div class="bottom-section">
-    <div class="bottom-line"></div>
-    <div class="bottom-info">
-      An official HiveTech product
-    </div>
-  </div>
+            data.forEach(video => {
+                const videoId = extractYouTubeID(video.link);
+                const thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
-  <script>
-    async function loadVideos() {
-      const container = document.getElementById('video-container');
-      const response = await fetch('yt_data.json');
-      const videos = await response.json();
-
-      videos.forEach(video => {
-        const videoId = new URL(video.link).searchParams.get("v");
-        const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-
-        const card = document.createElement('a');
-        card.href = video.link;
-        card.target = "_blank";
-        card.className = 'video-card';
-
-        card.innerHTML = `
-          <img src="${thumbnail}" alt="${video.title}">
-          <div class="video-info">
-            <h3>${video.title}</h3>
-            <p>${video.description}</p>
-          </div>
-        `;
-
-        container.appendChild(card);
-      });
-    }
-
-    loadVideos();
-  </script>
+                const card = document.createElement("a");
+                card.className = "card";
+                card.href = video.link;
+                card.target = "_blank";
+                card.innerHTML = `
+                <div class="card-top">
+                <img src="${thumb}" alt="Video thumbnail" />
+                </div>
+                <div class="card-content">
+                <p>${video.description}</p>
+                </div>
+                `;
+                container.appendChild(card);
+            });
+        });
+    </script>
 </body>
 </html>

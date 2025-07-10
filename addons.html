@@ -1,338 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Server Addons/Mods</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server Addons/Mods</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to top, #cc5500, #ff8c42);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
 
-    .floating-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      z-index: 999;
-      padding: 8px 0;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to top, #cc5500, #ff8c42);
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
 
-    .floating-nav-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 10px;
-    }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, #cc5500, #ff8c42);
+            z-index: -1;
+        }
 
-    .floating-nav-inner a {
-      flex: 1;
-      text-align: center;
-      color: #ddd;
-      text-decoration: none;
-      font-size: 13px;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 6px 0;
-      border-radius: 12px;
-      position: relative;
-    }
+        .floating-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 999;
+            padding: 8px 0;
+        }
 
-    .floating-nav-inner a i {
-      font-size: 18px;
-    }
+        .floating-nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
 
-    .floating-nav-inner a.active {
-      color: white;
-      transform: translateY(-2px);
-    }
+        .floating-nav-inner a {
+            flex: 1;
+            text-align: center;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0;
+            border-radius: 12px;
+            position: relative;
+        }
 
-    .floating-nav-inner a.active::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      left: 25%;
-      width: 50%;
-      height: 4px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.15);
-    }
+        .floating-nav-inner a i {
+            font-size: 20px;
+        }
 
-    .filter-bar {
-      margin-top: 120px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      max-width: 620px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    }
+        .floating-nav-inner a.active {
+            color: white;
+            transform: translateY(-2px);
+        }
 
-    .filter-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
+        .floating-nav-inner a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 25%;
+            width: 50%;
+            height: 4px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.15);
+        }
 
-    .filter-btn {
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      color: white;
-    }
+        .filter-bar {
+            margin-top: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            max-width: 620px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-    .filter-btn.cmp        { color: #00ffff; border-color: #00ffff; }
-    .filter-btn.smp        { color: #ff00ff; border-color: #ff00ff; }
-    .filter-btn.behaviours { color: #cc0000; border-color: #cc0000; }
-    .filter-btn.resources  { color: #ff8c00; border-color: #ff8c00; }
-    .filter-btn.mods       { color: #ffff00; border-color: #ffff00; }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
 
-    .filter-btn.active.cmp        { background: #00ffff; color: #000; }
-    .filter-btn.active.smp        { background: #ff00ff; color: #000; }
-    .filter-btn.active.behaviours { background: #cc0000; color: #fff; }
-    .filter-btn.active.resources  { background: #ff8c00; color: #000; }
-    .filter-btn.active.mods       { background: #ffff00; color: #000; }
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            color: white;
+        }
 
-    .select-toggle-btn {
-      padding: 8px 16px;
-      font-weight: 600;
-      font-size: 13px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.15);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
+        .filter-btn.cmp {
+            color: #00ffff;
+            border-color: #00ffff;
+        }
+        .filter-btn.smp {
+            color: #ff00ff;
+            border-color: #ff00ff;
+        }
+        .filter-btn.behaviours {
+            color: #cc0000;
+            border-color: #cc0000;
+        }
+        .filter-btn.resources {
+            color: #ff8c00;
+            border-color: #ff8c00;
+        }
+        .filter-btn.mods {
+            color: #ffff00;
+            border-color: #ffff00;
+        }
 
-    .select-toggle-btn:hover {
-      background: rgba(255, 255, 255, 0.25);
-    }
+        .filter-btn.active.cmp {
+            background: #00ffff;
+            color: #000;
+        }
+        .filter-btn.active.smp {
+            background: #ff00ff;
+            color: #000;
+        }
+        .filter-btn.active.behaviours {
+            background: #cc0000;
+            color: #fff;
+        }
+        .filter-btn.active.resources {
+            background: #ff8c00;
+            color: #000;
+        }
+        .filter-btn.active.mods {
+            background: #ffff00;
+            color: #000;
+        }
 
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      max-width: 600px;
-      margin: 40px auto 60px;
-    }
+        .select-toggle-btn {
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 13px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
 
-    .widget {
-      width: 280px;
-      height: 280px;
-      border-radius: 24px;
-      overflow: hidden;
-      position: relative;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+        .select-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
 
-    .widget img {
-      width: calc(100% - 20px);
-      height: calc(100% - 20px);
-      object-fit: cover;
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 1;
-      border-radius: 16px;
-    }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            max-width: 600px;
+            margin: 40px auto 60px;
+        }
 
-    .overlay {
-      position: absolute;
-      top: 10px; left: 10px; right: 10px; bottom: 10px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.1), rgba(0,0,0,0.6));
-      z-index: 2;
-      border-radius: 16px;
-    }
+        .widget {
+            width: 280px;
+            height: 280px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-    .tags {
-      position: absolute;
-      top: 20px; left: 20px; right: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      z-index: 10;
-    }
+        .widget img {
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            object-fit: cover;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+            border-radius: 16px;
+        }
 
-    .tag {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      color: white;
-      background: rgba(255, 255, 255, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-    }
+        .overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.1), rgba(0,0,0,0.6));
+            z-index: 2;
+            border-radius: 16px;
+        }
 
-    .tag.cmp        { color: #00ffff; border-color: #00ffff; }
-    .tag.smp        { color: #ff00ff; border-color: #ff00ff; }
-    .tag.behaviours { color: #cc0000; border-color: #cc0000; }
-    .tag.resources  { color: #ff8c00; border-color: #ff8c00; }
-    .tag.mods       { color: #ffff00; border-color: #ffff00; }
+        .tags {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            z-index: 10;
+        }
 
-    .bottom-section {
-      margin-top: auto;
-    }
+        .tag {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
 
-    .bottom-line {
-      width: 100%;
-      height: 2px;
-      background: #000;
-    }
+        .tag.cmp {
+            color: #00ffff;
+            border-color: #00ffff;
+        }
+        .tag.smp {
+            color: #ff00ff;
+            border-color: #ff00ff;
+        }
+        .tag.behaviours {
+            color: #cc0000;
+            border-color: #cc0000;
+        }
+        .tag.resources {
+            color: #ff8c00;
+            border-color: #ff8c00;
+        }
+        .tag.mods {
+            color: #ffff00;
+            border-color: #ffff00;
+        }
 
-    .bottom-info {
-      background: #333;
-      padding: 8px 20px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      min-height: 35px;
-      color: #ccc;
-      font-size: 12px;
-    }
-  </style>
+        .bottom-section {
+            margin-top: auto;
+        }
+
+        .bottom-line {
+            width: 100%;
+            height: 2px;
+            background: #000;
+        }
+
+        .bottom-info {
+            background: #333;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 35px;
+            color: #ccc;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .floating-nav-inner {
+                padding: 0 15px;
+            }
+
+            .floating-nav-inner a {
+                font-size: 12px;
+            }
+
+            .floating-nav-inner a i {
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="floating-nav">
-    <div class="floating-nav-inner">
-      <a href="members.html"><i class="fas fa-users"></i><span>Members</span></a>
-      <a href="addons.html" class="active"><i class="fas fa-puzzle-piece"></i><span>Addons</span></a>
-      <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="updates.html"><i class="fas fa-bullhorn"></i><span>Updates</span></a>
-      <a href="archive.html"><i class="fas fa-archive"></i><span>Archive</span></a>
+    <div class="floating-nav">
+        <div class="floating-nav-inner">
+            <a href="members.html"><i class="fas fa-users"></i><span>Members</span></a>
+            <a href="addons.html" class="active"><i class="fas fa-puzzle-piece"></i><span>Addons</span></a>
+            <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="updates.html"><i class="fas fa-bullhorn"></i><span>Updates</span></a>
+            <a href="archive.html"><i class="fas fa-archive"></i><span>Archive</span></a>
+        </div>
     </div>
-  </div>
     <div class="filter-bar">
-    <button class="select-toggle-btn">Select All</button>
-    <div class="filter-buttons">
-      <button class="filter-btn cmp" data-tag="cmp">CMP</button>
-      <button class="filter-btn smp" data-tag="smp">SMP</button>
-      <button class="filter-btn behaviours" data-tag="behaviours">Behaviours</button>
-      <button class="filter-btn resources" data-tag="resources">Resources</button>
-      <button class="filter-btn mods" data-tag="mods">Mods</button>
+        <button class="select-toggle-btn">Select All</button>
+        <div class="filter-buttons">
+            <button class="filter-btn cmp" data-tag="cmp">CMP</button>
+            <button class="filter-btn smp" data-tag="smp">SMP</button>
+            <button class="filter-btn behaviours" data-tag="behaviours">Behaviours</button>
+            <button class="filter-btn resources" data-tag="resources">Resources</button>
+            <button class="filter-btn mods" data-tag="mods">Mods</button>
+        </div>
     </div>
-  </div>
 
-  <div id="widget-container" class="container"></div>
+    <div id="widget-container" class="container"></div>
 
-  <div class="bottom-section">
-    <div class="bottom-line"></div>
-    <div class="bottom-info">An official HiveTech product</div>
-  </div>
+    <div class="bottom-section">
+        <div class="bottom-line"></div>
+        <div class="bottom-info">
+            An official HiveTech product
+        </div>
+    </div>
 
-  <script>
-    const container = document.getElementById("widget-container");
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const toggleBtn = document.querySelector('.select-toggle-btn');
-    const allTags = Array.from(filterButtons).map(btn => btn.dataset.tag);
-    const selectedTags = new Set();
-    let data = [];
+    <script>
+        const container = document.getElementById("widget-container");
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const toggleBtn = document.querySelector('.select-toggle-btn');
+        const allTags = Array.from(filterButtons).map(btn => btn.dataset.tag);
+        const selectedTags = new Set();
+        let data = [];
 
-    function renderWidgets(filterTags = []) {
-      container.innerHTML = "";
-      data.forEach(widget => {
-        const widgetTags = widget.tags;
-        const matches = filterTags.length === 0 || widgetTags.some(tag => filterTags.includes(tag));
-        if (!matches) return;
+        function renderWidgets(filterTags = []) {
+            container.innerHTML = "";
+            data.forEach(widget => {
+                const widgetTags = widget.tags;
+                const matches = filterTags.length === 0 || widgetTags.some(tag => filterTags.includes(tag));
+                if (!matches) return;
 
-        const tags = widgetTags
-          .map(tag => `<span class="tag ${tag}">${tag.toUpperCase()}</span>`)
-          .join("");
+                const tags = widgetTags
+                .map(tag => `<span class="tag ${tag}">${tag.toUpperCase()}</span>`)
+                .join("");
 
-        const githubLink = widget.github || "#";
+                const githubLink = widget.github || "#";
 
-        container.insertAdjacentHTML("beforeend", `
-          <div class="widget">
-            <img src="${widget.image}" alt="${widget.name}">
-            <div class="overlay"></div>
-            <div class="tags">${tags}</div>
-            <div class="bottom-section-widget" style="position:absolute;bottom:16px;left:20px;right:20px;z-index:10;">
-              <div class="info" style="text-align:center;margin-bottom:12px;">
-                <div class="name" style="font-size:18px;font-weight:700;color:white;">${widget.name}</div>
-                <div class="dev-name" style="font-size:12px;color:rgba(255,255,255,0.9);">Created by: ${widget.creator}</div>
-              </div>
-              <a class="download-btn" href="${githubLink}" target="_blank"
-                 style="display:block;width:100%;padding:12px;font-size:14px;font-weight:600;text-align:center;background:#ccc;border-radius:12px;color:#000;text-decoration:none;">
-                Download
-              </a>
-            </div>
-          </div>
-        `);
-      });
-    }
-
-    fetch('data.json')
-      .then(response => response.json())
-      .then(json => {
-        data = json;
-        renderWidgets([]);
-      });
-
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const tag = button.dataset.tag;
-        if (selectedTags.has(tag)) {
-          selectedTags.delete(tag);
-          button.classList.remove("active");
-        } else {
-          selectedTags.add(tag);
-          button.classList.add("active");
+                container.insertAdjacentHTML("beforeend", `
+                    <div class="widget">
+                    <img src="${widget.image}" alt="${widget.name}">
+                    <div class="overlay"></div>
+                    <div class="tags">${tags}</div>
+                    <div class="bottom-section-widget" style="position:absolute;bottom:16px;left:20px;right:20px;z-index:10;">
+                    <div class="info" style="text-align:center;margin-bottom:12px;">
+                    <div class="name" style="font-size:18px;font-weight:700;color:white;">${widget.name}</div>
+                    <div class="dev-name" style="font-size:12px;color:rgba(255,255,255,0.9);">Created by: ${widget.creator}</div>
+                    </div>
+                    <a class="download-btn" href="${githubLink}" target="_blank"
+                    style="display:block;width:100%;padding:12px;font-size:14px;font-weight:600;text-align:center;background:#ccc;border-radius:12px;color:#000;text-decoration:none;">
+                    Download
+                    </a>
+                    </div>
+                    </div>
+                    `);
+            });
         }
-        renderWidgets([...selectedTags]);
-        updateToggleText();
-      });
-    });
 
-    toggleBtn.addEventListener('click', () => {
-      const selecting = selectedTags.size !== allTags.length;
-      selectedTags.clear();
-      filterButtons.forEach(button => {
-        if (selecting) {
-          selectedTags.add(button.dataset.tag);
-          button.classList.add("active");
-        } else {
-          button.classList.remove("active");
+        fetch('data.json')
+        .then(response => response.json())
+        .then(json => {
+            data = json;
+            renderWidgets([]);
+        });
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tag = button.dataset.tag;
+                if (selectedTags.has(tag)) {
+                    selectedTags.delete(tag);
+                    button.classList.remove("active");
+                } else {
+                    selectedTags.add(tag);
+                    button.classList.add("active");
+                }
+                renderWidgets([...selectedTags]);
+                updateToggleText();
+            });
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            const selecting = selectedTags.size !== allTags.length;
+            selectedTags.clear();
+            filterButtons.forEach(button => {
+                if (selecting) {
+                    selectedTags.add(button.dataset.tag);
+                    button.classList.add("active");
+                } else {
+                    button.classList.remove("active");
+                }
+            });
+            renderWidgets([...selectedTags]);
+            updateToggleText();
+        });
+
+        function updateToggleText() {
+            toggleBtn.textContent = selectedTags.size === allTags.length ? "Clear All": "Select All";
         }
-      });
-      renderWidgets([...selectedTags]);
-      updateToggleText();
-    });
-
-    function updateToggleText() {
-      toggleBtn.textContent = selectedTags.size === allTags.length ? "Clear All" : "Select All";
-    }
-  </script>
+    </script>
 </body>
 </html>

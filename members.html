@@ -1,305 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meet the Members</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meet the Members</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to top, #cc5500, #ff8c42);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
 
-    .floating-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      z-index: 999;
-      padding: 8px 0;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to top, #cc5500, #ff8c42);
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
 
-    .floating-nav-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 10px;
-    }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, #cc5500, #ff8c42);
+            z-index: -1;
+        }
 
-    .floating-nav-inner a {
-      flex: 1;
-      text-align: center;
-      color: #ddd;
-      text-decoration: none;
-      font-size: 13px;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 6px 0;
-      border-radius: 12px;
-      position: relative;
-    }
+        .floating-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 999;
+            padding: 8px 0;
+        }
 
-    .floating-nav-inner a i {
-      font-size: 18px;
-    }
+        .floating-nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
 
-    .floating-nav-inner a.active {
-      color: white;
-      transform: translateY(-2px);
-    }
+        .floating-nav-inner a {
+            flex: 1;
+            text-align: center;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0;
+            border-radius: 12px;
+            position: relative;
+        }
 
-    .floating-nav-inner a.active::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      left: 25%;
-      width: 50%;
-      height: 4px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.15);
-    }
+        .floating-nav-inner a i {
+            font-size: 20px;
+        }
 
-    .main-content {
-      flex: 1;
-      padding: 100px 20px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
-    }
+        .floating-nav-inner a.active {
+            color: white;
+            transform: translateY(-2px);
+        }
 
-    .logo-panel, .global-map-panel {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      width: 100%;
-      max-width: 800px;
-      text-align: center;
-      color: white;
-    }
+        .floating-nav-inner a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 25%;
+            width: 50%;
+            height: 4px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.15);
+        }
 
-    .members-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      width: 100%;
-      max-width: 1000px;
-    }
+        .main-content {
+            flex: 1;
+            padding: 100px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-    .member-card {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 20px;
-      color: white;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      display: flex;
-      align-items: center;
-      width: 100%;
-    }
+        .logo-panel, .global-map-panel {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            color: white;
+        }
 
-    .member-pfp {
-      width: 80px;
-      height: 80px;
-      border-radius: 10px;
-      margin-right: 20px;
-      object-fit: cover;
-      background: #333;
-    }
+        .logo-panel h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
 
-    .member-info {
-      flex: 1;
-    }
+        .logo-panel .intro {
+            font-size: 1rem;
+            opacity: 0.85;
+            line-height: 1.5;
+        }
 
-    .member-name {
-      font-size: 20px;
-      font-weight: bold;
-    }
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1000px;
+        }
 
-    .member-ign {
-      font-size: 14px;
-      color: #ccc;
-      margin-top: 4px;
-    }
+        .member-card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 24px;
+            color: white;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
 
-    .member-role {
-      margin-top: 6px;
-      display: inline-flex;
-      align-items: center;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 8px;
-    }
+        .member-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        }
 
-    .role-owner    { background: maroon; color: white; }
-    .role-manager  { background: magenta; color: white; }
-    .role-member   { background: cyan; color: black; }
+        .member-pfp {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            margin-right: 20px;
+            object-fit: cover;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-    .member-role i {
-      margin-right: 6px;
-    }
+        .member-info {
+            flex: 1;
+        }
 
-    .social-icons {
-      margin-top: 10px;
-    }
+        .member-name {
+            font-size: 20px;
+            font-weight: 600;
+        }
 
-    .social-icons a {
-      margin-right: 10px;
-      font-size: 20px;
-    }
+        .member-ign {
+            font-size: 14px;
+            color: #ccc;
+            margin-top: 4px;
+            opacity: 0.8;
+        }
 
-    .social-icons .youtube { color: red; }
-    .social-icons .twitch  { color: purple; }
-    .social-icons .discord { color: #5865F2; }
-    .social-icons .github  { color: white; }
+        .member-role {
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-    .map-widget {
-      position: relative;
-      padding: 0;
-      overflow: hidden;
-      aspect-ratio: 16 / 9;
-    }
+        .role-owner {
+            background: rgba(139, 0, 0, 0.8);
+            color: white;
+        }
+        .role-manager {
+            background: rgba(255, 0, 255, 0.8);
+            color: white;
+        }
+        .role-member {
+            background: rgba(0, 255, 255, 0.8);
+            color: black;
+        }
 
-    .map-image {
-      width: calc(100% - 20px);
-      height: calc(100% - 20px);
-      margin: 10px;
-      border-radius: 12px;
-      background-image: url("map.png");
-      background-size: cover;
-      background-position: center;
-    }
+        .member-role i {
+            margin-right: 6px;
+        }
 
-    .map-overlay {
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 15px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-      z-index: 2;
-      text-align: center;
-      pointer-events: none;
-    }
+        .social-icons {
+            margin-top: 12px;
+        }
 
-    .bottom-section {
-      margin-top: auto;
-    }
+        .social-icons a {
+            margin-right: 12px;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
 
-    .bottom-line {
-      width: 100%;
-      height: 2px;
-      background: #000;
-    }
+        .social-icons a:hover {
+            transform: scale(1.1);
+        }
 
-    .bottom-info {
-      background: #333;
-      padding: 8px 20px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      min-height: 35px;
-    }
+        .social-icons .youtube {
+            color: #ff0000;
+        }
+        .social-icons .twitch {
+            color: #9146ff;
+        }
+        .social-icons .discord {
+            color: #5865f2;
+        }
+        .social-icons .github {
+            color: white;
+        }
 
-    .info-text {
-      color: #ccc;
-      font-size: 12px;
-    }
+        .map-widget {
+            position: relative;
+            padding: 0;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+        }
 
-    @media (max-width: 600px) {
-      .member-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+        .map-image {
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            margin: 10px;
+            border-radius: 20px;
+            background-image: url("map.png");
+            background-size: cover;
+            background-position: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-      .member-pfp {
-        margin-right: 0;
-        margin-bottom: 10px;
-      }
-    }
-  </style>
+        .map-overlay {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+            z-index: 2;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .bottom-section {
+            margin-top: auto;
+        }
+
+        .bottom-line {
+            width: 100%;
+            height: 2px;
+            background: #000;
+        }
+
+        .bottom-info {
+            background: #333;
+            padding: 10px 24px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 40px;
+            color: #ccc;
+            font-size: 13px;
+        }
+
+@media (max-width: 768px) {
+            .floating-nav-inner {
+                padding: 0 15px;
+            }
+
+            .floating-nav-inner a {
+                font-size: 12px;
+            }
+
+            .floating-nav-inner a i {
+                font-size: 18px;
+            }
+
+            .main-content {
+                padding: 90px 15px 30px;
+                gap: 30px;
+            }
+
+            .logo-panel, .global-map-panel {
+                padding: 24px;
+            }
+
+            .logo-panel h2 {
+                font-size: 1.5rem;
+            }
+
+            .member-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+            }
+
+            .member-pfp {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+
+@media (max-width: 600px) {
+            .members-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="floating-nav">
-    <div class="floating-nav-inner">
-      <a href="members.html" class="active"><i class="fas fa-users"></i><span>Members</span></a>
-      <a href="addons.html"><i class="fas fa-puzzle-piece"></i><span>Addons</span></a>
-      <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="updates.html"><i class="fas fa-bullhorn"></i><span>Updates</span></a>
-      <a href="archive.html"><i class="fas fa-archive"></i><span>Archive</span></a>
-    </div>
-  </div>
-
-  <div class="main-content">
-    <div class="logo-panel">
-      <h2>Meet the Members</h2>
-      <p class="intro">
-        Meet our talented members that make HiveTech buzz! From builders to redstoners, see where they're from on the HiveMap.
-      </p>
+    <div class="floating-nav">
+        <div class="floating-nav-inner">
+            <a href="members.html" class="active"><i class="fas fa-users"></i><span>Members</span></a>
+            <a href="addons.html"><i class="fas fa-puzzle-piece"></i><span>Addons</span></a>
+            <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="updates.html"><i class="fas fa-bullhorn"></i><span>Updates</span></a>
+            <a href="archive.html"><i class="fas fa-archive"></i><span>Archive</span></a>
+        </div>
     </div>
 
-    <div class="global-map-panel map-widget">
-      <div class="map-overlay">Member Map</div>
-      <div class="map-image"></div>
-    </div>
+    <div class="main-content">
+        <div class="logo-panel">
+            <h2>Meet the Members</h2>
+            <p class="intro">
+                Meet our talented members that makes the server buzz! From builders to redstoners, see where they're from on the member map.
+            </p>
+        </div>
 
-    <div class="members-grid" id="membersGrid"></div>
-  </div>
-
-  <div class="bottom-section">
-    <div class="bottom-line"></div>
-    <div class="bottom-info"><span class="info-text">An official HiveTech product</span></div>
-  </div>
-
-  <script>
-    fetch('https://raw.githubusercontent.com/HiveTechServer/Docs/main/members.json')
-      .then(res => res.json())
-      .then(data => {
-        const grid = document.getElementById('membersGrid');
-        data.forEach(member => {
-          const card = document.createElement('div');
-          card.className = 'member-card';
-          card.innerHTML = `
-            <img class="member-pfp" src="${member.pfp}" alt="${member.name} PFP">
-            <div class="member-info">
-              <div class="member-name">${member.name}</div>
-              <div class="member-ign">${member.ign}</div>
-              <div class="member-role role-${member.role.toLowerCase()}">
-                <i class="${member.role === 'owner' ? 'fas fa-crown' : member.role === 'manager' ? 'fas fa-shield-halved' : 'fas fa-bug'}"></i>
-                ${member.role.charAt(0).toUpperCase() + member.role.slice(1)}
-              </div>
-              <div class="social-icons">
-                ${member.youtube ? `<a class="youtube" href="${member.youtube}" target="_blank"><i class="fab fa-youtube"></i></a>` : ''}
-                ${member.twitch ? `<a class="twitch" href="${member.twitch}" target="_blank"><i class="fab fa-twitch"></i></a>` : ''}
-                ${member.discord ? `<a class="discord" href="${member.discord}" target="_blank"><i class="fab fa-discord"></i></a>` : ''}
-                ${member.github ? `<a class="github" href="${member.github}" target="_blank"><i class="fab fa-github"></i></a>` : ''}
-              </div>
+        <div class="global-map-panel map-widget">
+            <div class="map-overlay">
+                Member Map
             </div>
-          `;
-          grid.appendChild(card);
-        });
-      })
-      .catch(err => console.error("Failed to fetch members.json:", err));
-  </script>
+            <div class="map-image"></div>
+        </div>
+
+        <div class="members-grid" id="membersGrid"></div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="bottom-line"></div>
+        <div class="bottom-info">
+            An official HiveTech product
+        </div>
+    </div>
+
+    <script>
+        fetch('https://raw.githubusercontent.com/HiveTechServer/Docs/main/members.json')
+        .then(res => res.json())
+        .then(data => {
+            const grid = document.getElementById('membersGrid');
+            data.forEach(member => {
+                const card = document.createElement('div');
+                card.className = 'member-card';
+                card.innerHTML = `
+                <img class="member-pfp" src="${member.pfp}" alt="${member.name} PFP">
+                <div class="member-info">
+                <div class="member-name">${member.name}</div>
+                <div class="member-ign">${member.ign}</div>
+                <div class="member-role role-${member.role.toLowerCase()}">
+                <i class="${member.role === 'owner' ? 'fas fa-crown': member.role === 'manager' ? 'fas fa-shield-halved': 'fas fa-regular fa-user'}"></i>
+                ${member.role.charAt(0).toUpperCase() + member.role.slice(1)}
+                </div>
+                <div class="social-icons">
+                ${member.youtube ? `<a class="youtube" href="${member.youtube}" target="_blank"><i class="fab fa-youtube"></i></a>`: ''}
+                ${member.twitch ? `<a class="twitch" href="${member.twitch}" target="_blank"><i class="fab fa-twitch"></i></a>`: ''}
+                ${member.discord ? `<a class="discord" href="${member.discord}" target="_blank"><i class="fab fa-discord"></i></a>`: ''}
+                ${member.github ? `<a class="github" href="${member.github}" target="_blank"><i class="fab fa-github"></i></a>`: ''}
+                </div>
+                </div>
+                `;
+                grid.appendChild(card);
+            });
+        })
+        .catch(err => console.error("Failed to fetch members.json:", err));
+    </script>
 </body>
 </html>

@@ -31,7 +31,6 @@
             position: relative;
         }
 
-        /* Background overlay to ensure coverage on all screen sizes */
         body::before {
             content: '';
             position: fixed;
@@ -100,9 +99,189 @@
             background: rgba(255, 255, 255, 0.15);
         }
 
+        /* Filter Bar Styles */
+        .filter-wrapper {
+            position: relative;
+            margin: 0 auto 40px;
+            width: clamp(320px, 90vw, 640px);
+            z-index: 10;
+        }
+
+        .bar-container {
+            background: #141414;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.25);
+            border-radius: 30px;
+            overflow: hidden;
+            transition: height 0.4s ease;
+        }
+
+        .bar-container.collapsed {
+            height: 64px;
+        }
+
+        .bar-container.expanded {
+            height: auto;
+        }
+
+        .bar-top {
+            display: flex;
+            height: 64px;
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: #180902FF;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 18px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .search-icon {
+            width: 40px;
+            height: 40px;
+            background: #272727FF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: white;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .filter-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 20px;
+            height: 100%;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .filter-button-text {
+            color: white;
+            font-size: 16px;
+        }
+
+        .filter-icon-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #272727FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .drawer {
+            height: 0;
+            opacity: 0;
+            transition: height 0.4s ease, opacity 0.3s ease;
+        }
+
+        .bar-container.expanded .drawer {
+            height: auto;
+            opacity: 1;
+        }
+
+        .drawer-content {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: #180902FF;
+        }
+
+        .drawer-content label {
+            background: #272727FF;
+            padding: 8px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 14px;
+            white-space: nowrap;
+            color: white;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 64px;
+            height: 34px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #444;
+            border-radius: 34px;
+            transition: background-color 0.3s;
+        }
+
+        .slider::before {
+            content: "✕";
+            position: absolute;
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            top: 4px;
+            background-color: #ccc;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border-radius: 50%;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s;
+        }
+
+        .toggle input:checked + .slider {
+            background-color: #28a745;
+        }
+
+        .toggle input:checked + .slider::before {
+            transform: translateX(30px);
+            content: "✓";
+            background-color: #fff;
+            color: #28a745;
+        }
+
+        .drawer-content input {
+            margin-right: 8px;
+        }
+
         .main-content {
             flex: 1;
-            padding: 120px 20px 40px;
+            padding: 200px 20px 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -110,138 +289,6 @@
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
-        }
-
-        .filter-bar {
-            position: sticky;
-            top: 64px;
-            /* height of your nav bar */
-            z-index: 998;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 12px 24px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 1000px;
-            margin: 0 auto 20px;
-        }
-        .filter-bar.stuck {
-            animation: fadeInSlide 0.4s ease forwards;
-        }
-
-@keyframes fadeInSlide {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .filter-btn {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 10px 18px;
-            color: white;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .filter-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .filter-panel {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            margin-top: 8px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            color: white;
-            font-size: 14px;
-            max-height: 300px;
-            overflow-y: auto;
-            width: 100%;
-        }
-
-        .filter-panel.hidden {
-            display: none;
-        }
-
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 6px 0;
-            position: relative;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .toggle-container input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: relative;
-            width: 52px;
-            height: 26px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 999px;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .slider::before {
-            content: "";
-            position: absolute;
-            height: 22px;
-            width: 22px;
-            left: 2px;
-            top: 2px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .toggle-container input:checked + .slider {
-            background: rgba(0, 204, 102, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 204, 102, 0.3);
-        }
-
-        .toggle-container input:checked + .slider::before {
-            transform: translateX(26px);
-            background: rgba(230, 255, 230, 0.8);
-        }
-
-        .toggle-label {
-            color: white;
-            font-size: 14px;
         }
 
         .carousel-container {
@@ -523,13 +570,6 @@
             font-size: 13px;
         }
 
-        #filter-indicator {
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-
         .expandable-content strong {
             font-weight: 700;
             color: #fff;
@@ -571,7 +611,6 @@
             font-style: italic;
         }
 
-        /* Responsive adjustments */
 @media (max-width: 768px) {
             .floating-nav-inner {
                 padding: 0 15px;
@@ -585,18 +624,15 @@
                 font-size: 18px;
             }
 
+            .filter-wrapper {
+                top: 100px;
+                left: 1vw;
+                width: clamp(280px, 95vw, 640px);
+            }
+
             .main-content {
-                padding: 100px 15px 30px;
+                padding: 180px 15px 30px;
                 gap: 30px;
-            }
-
-            .filter-bar {
-                padding: 10px 18px;
-            }
-
-            .filter-btn {
-                padding: 8px 14px;
-                font-size: 13px;
             }
 
             .overlay .title {
@@ -639,14 +675,11 @@
                 gap: 50px;
             }
 
-            .filter-bar {
-                max-width: 1200px;
-            }
-
             .carousel-container {
                 max-width: 1200px;
             }
         }
+
         .loading-card {
             display: flex;
             align-items: center;
@@ -692,6 +725,7 @@
                 background-position: 200% 0;
             }
         }
+
         .image-wrapper.square {
             aspect-ratio: 1 / 1;
             height: auto;
@@ -705,52 +739,45 @@
             left: 0;
             transform: none;
         }
-        .carousel-search {
-            width: 100%;
-            max-width: 1000px;
-            margin: 4px auto 10px;
-            /* This controls spacing above/below */
-            display: flex;
-            justify-content: flex-start;
-        }
+@media (max-height: 500px) and (orientation: landscape) {
+            .drawer-content {
+                max-height: 200px;
+                overflow-y: auto;
+                padding-right: 8px;
+            }
 
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.08);
+            .drawer-content::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .drawer-content::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 4px;
+            }
+        }
+        .intro-panel {
+            width: clamp(320px, 90vw, 640px);
+            margin: 120px auto 2px;
+            padding: 24px 28px;
+            border-radius: 24px;
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 999px;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .search-bar input {
-            background: transparent;
-            border: none;
-            padding: 12px 18px;
-            font-size: 15px;
-            color: #fff;
-            outline: none;
-            width: 240px;
-        }
-
-        .search-bar button {
-            background: rgba(0, 0, 0, 0.6);
-            border: none;
-            padding: 12px 14px;
             color: white;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 999px 0 0 999px;
+            text-align: center;
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .search-bar button i {
-            pointer-events: none;
+        .intro-panel h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .intro-panel p {
+            font-size: 1rem;
+            opacity: 0.85;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -765,23 +792,39 @@
         </div>
     </div>
 
-    <div class="main-content">
-        <div class="filter-bar">
-            <button id="filter-toggle" class="filter-btn"><i class="fa fa-filter"></i> Filters</button>
-            <span id="filter-indicator" style="display:none;">● Filters Active</span>
-            <div id="filter-panel" class="filter-panel hidden"></div>
-        </div>
-
-        <!-- BUILD SECTION -->
-        <h2 style="color:white; margin: 0px 0 0px;">Builds</h2>
-
-        <!-- Search for Builds -->
-        <div class="carousel-search">
-            <div class="search-bar">
-                <button><i class="fa fa-search"></i></button>
-                <input type="text" id="search-builds" placeholder="Search..." />
+    <div class="intro-panel">
+        <h1>HiveTech Archive</h1>
+        <p>
+            Here you can builds and packs from our members. You can use the filters below to sort by creator, or tag.
+        </p>
+    </div>
+    <!-- Filter Bar -->
+    <div class="filter-wrapper">
+        <div class="bar-container collapsed" id="barContainer">
+            <div class="bar-top">
+                <div class="search-box">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <input type="text" class="search-input" placeholder="Search" id="searchInput" />
+                </div>
+                <div class="filter-button" onclick="toggleDrawer()">
+                    <span class="filter-button-text">Filters</span>
+                    <div class="filter-icon-circle">
+                        <i class="fas fa-caret-down"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="drawer" id="drawerPanel">
+                <div class="drawer-content" id="tagContainer">
+                </div>
             </div>
         </div>
+    </div>
+
+    <div class="main-content">
+        <!-- BUILD SECTION -->
+        <h2 style="color:white; margin: 2px 3 2px;">Builds</h2>
 
         <div class="carousel-container" id="carousel-builds">
             <div class="carousel-wrapper">
@@ -794,14 +837,6 @@
 
         <!-- PACK SECTION -->
         <h2 style="color:white; margin: 0px 0 0px;">Packs</h2>
-
-        <!-- Search for Packs -->
-        <div class="carousel-search">
-            <div class="search-bar">
-                <button><i class="fa fa-search"></i></button>
-                <input type="text" id="search-packs" placeholder="Search..." />
-            </div>
-        </div>
 
         <div class="carousel-container" id="carousel-packs">
             <div class="carousel-wrapper">
@@ -821,282 +856,317 @@
         </div>
     </div>
 
-  <script>
-let cardsData = [], activeFilter = [];
-let slideBuild = 0, slidePack = 0;
+    <script>
+        let cardsData = [];
+        let slideBuild = 0, slidePack = 0;
+        let filteredCardsData = [];
+        let selectedTags = new Set();
 
-function renderMarkdown(text) {
-    const lines = text.split('\n');
-    let html = '';
-    let inList = false;
+        function toggleDrawer() {
+            const bar = document.getElementById("barContainer");
+            bar.classList.toggle("expanded");
+            bar.classList.toggle("collapsed");
+        }
 
-    const applyInline = (str) => {
-        return str
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*(.*?)\*/g, '<em>$1</em>')
-            .replace(/`(.*?)`/g, '<code>$1</code>')
-            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-    };
+        function renderMarkdown(text) {
+            const lines = text.split('\n');
+            let html = '';
+            let inList = false;
 
-    for (let line of lines) {
-        line = line.trim();
-        if (line === '') continue;
+            const applyInline = (str) => {
+                return str
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            };
 
-        if (line.startsWith('- ')) {
-            if (!inList) {
-                html += '<ul>';
-                inList = true;
+            for (let line of lines) {
+                line = line.trim();
+                if (line === '') continue;
+
+                if (line.startsWith('- ')) {
+                    if (!inList) {
+                        html += '<ul>';
+                        inList = true;
+                    }
+                    html += `<li>${applyInline(line.slice(2))}</li>`;
+                    continue;
+                }
+
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+
+                if (line.startsWith('### ')) {
+                    html += `<h3>${applyInline(line.slice(4))}</h3>`;
+                } else if (line.startsWith('## ')) {
+                    html += `<h2>${applyInline(line.slice(3))}</h2>`;
+                } else if (line.startsWith('# ')) {
+                    html += `<h1>${applyInline(line.slice(2))}</h1>`;
+                } else if (line.startsWith('> (')) {
+                    const match = line.match(/^> \((#[0-9a-fA-F]{3,6})\)\s*(.*)$/);
+                    if (match) {
+                        const [,
+                            color,
+                            content] = match;
+                        html += `<div style="border-left: 4px solid ${color}; padding-left: 12px; margin: 10px 0; color: ${color}; opacity: 0.8;">${applyInline(content)}</div>`;
+                    }
+                } else if (line.startsWith('> ')) {
+                    html += `<blockquote>${applyInline(line.slice(2))}</blockquote>`;
+                } else {
+                    html += `<p>${applyInline(line)}</p>`;
+                }
             }
-            html += `<li>${applyInline(line.slice(2))}</li>`;
-            continue;
+
+            if (inList) html += '</ul>';
+            return html;
         }
 
-        if (inList) {
-            html += '</ul>';
-            inList = false;
+        function createCard(data, index) {
+            const isPack = (data.type || 'build') === 'pack';
+            const cardId = `${isPack ? 'pack': 'build'}-${index}`;
+            return `
+            <div class="card ${isPack ? 'card-pack': ''}" data-index="${cardId}">
+            <div class="card-inner">
+            <div class="card-top">
+            <div class="image-wrapper ${isPack ? 'square': ''}">
+            <img src="${data.image}" loading="lazy" decoding="async" />
+            <div class="overlay">
+            <div class="title">${data.title}</div>
+            <div class="subtitle">${data.subtitle}</div>
+            </div>
+            </div>
+            <div class="info-panel">
+            <div class="tags">${(data.tags || []).map(tag => `<div class="tag">${tag}</div>`).join('')}</div>
+            <div class="buttons">
+            <button class="toggle-download"><i class="fa fa-download"></i> Download</button>
+            <button class="toggle-info"><i class="fa fa-circle-info"></i> More Info</button>
+            </div>
+            </div>
+            </div>
+            <div class="expandable-wrapper download-wrapper">
+            <div class="expandable-content">
+            ${data.downloads.map(file => `
+                <a href="${file.link}" class="file-card" download>
+                <div class="file-icon"></div>
+                <div class="file-info">
+                <div class="file-name">${file.name}</div>
+                <div class="file-size">${file.size}</div>
+                </div>
+                </a>
+                ${file.screenshots && file.screenshots.length ? `
+                <div class="download-screens">
+                ${file.screenshots.map(img => `<img src="${img}" loading="lazy" decoding="async" alt="screenshot" />`).join('')}
+                </div>`: ''}
+                `).join('')}
+            </div>
+            </div>
+            <div class="expandable-wrapper info-wrapper">
+            <div class="expandable-content">${renderMarkdown(data.info || '')}</div>
+            </div>
+            </div>
+            </div>`;
         }
 
-        if (line.startsWith('### ')) {
-            html += `<h3>${applyInline(line.slice(4))}</h3>`;
-        } else if (line.startsWith('## ')) {
-            html += `<h2>${applyInline(line.slice(3))}</h2>`;
-        } else if (line.startsWith('# ')) {
-            html += `<h1>${applyInline(line.slice(2))}</h1>`;
-        } else if (line.startsWith('> (')) {
-            const match = line.match(/^> \((#[0-9a-fA-F]{3,6})\)\s*(.*)$/);
-            if (match) {
-                const [, color, content] = match;
-                html += `<div style="border-left: 4px solid ${color}; padding-left: 12px; margin: 10px 0; color: ${color}; opacity: 0.8;">${applyInline(content)}</div>`;
+        function bindToggleButtons() {
+            document.querySelectorAll('.toggle-download').forEach(btn =>
+                btn.onclick = e => togglePanel(e, 'download')
+            );
+            document.querySelectorAll('.toggle-info').forEach(btn =>
+                btn.onclick = e => togglePanel(e, 'info')
+            );
+        }
+
+        function togglePanel(e, type) {
+            const card = e.currentTarget.closest('.card');
+            const panel = card.querySelector(`.${type}-wrapper`);
+            const other = card.querySelector(`.${type === 'download' ? 'info': 'download'}-wrapper`);
+
+            if (other) other.style.height = '0px';
+            const isOpen = panel.style.height && panel.style.height !== '0px';
+            panel.style.height = isOpen ? '0px': `${panel.querySelector('.expandable-content').scrollHeight}px`;
+        }
+
+        function closeAllPanels() {
+            document.querySelectorAll('.expandable-wrapper').forEach(p => p.style.height = '0px');
+        }
+
+        function filteredByType(type) {
+            return filteredCardsData.filter(c => (c.type || "build") === type);
+        }
+
+        function renderCarousel(type, slide, trackId, dotsId) {
+            const cards = filteredByType(type);
+            const track = document.getElementById(trackId);
+            const dots = document.getElementById(dotsId);
+
+            if (!cards.length) {
+                track.innerHTML = '<div class="card"><div class="card-inner"><div style="padding: 40px; color:white; text-align:center;">No cards found.</div></div></div>';
+                dots.innerHTML = '';
+                return;
             }
-        } else if (line.startsWith('> ')) {
-            html += `<blockquote>${applyInline(line.slice(2))}</blockquote>`;
-        } else {
-            html += `<p>${applyInline(line)}</p>`;
+
+            const visibleCards = cards.filter((_, i) => Math.abs(i - slide) <= 1);
+            track.innerHTML = visibleCards.map(c => {
+                const index = cardsData.indexOf(c);
+                return createCard(c, index);
+            }).join('');
+            dots.innerHTML = cards.map((_, i) =>
+                `<div class="carousel-dot ${i === slide ? 'active': ''}" data-slide="${i}"></div>`
+            ).join('');
+
+            bindToggleButtons();
+
+            const activeSlide = type === 'build' ? slideBuild: slidePack;
+            track.style.transform = `translateX(-${activeSlide * 100}%)`;
+            document.getElementById(`prev-${type}`).disabled = activeSlide === 0;
+            document.getElementById(`next-${type}`).disabled = activeSlide === cards.length - 1;
+
+            document.querySelectorAll(`#${dotsId} .carousel-dot`).forEach(dot =>
+                dot.onclick = e => {
+                    if (type === 'build') slideBuild = parseInt(e.target.dataset.slide);
+                    else slidePack = parseInt(e.target.dataset.slide);
+                    closeAllPanels();
+                    updateCarousels();
+                });
         }
-    }
 
-    if (inList) html += '</ul>';
-    return html;
-}
+        function updateCarousels() {
+            renderCarousel('build',
+                slideBuild,
+                'track-builds',
+                'dots-build');
+            renderCarousel('pack',
+                slidePack,
+                'track-packs',
+                'dots-pack');
+        }
 
-function createCard(data, index) {
-    const isPack = (data.type || 'build') === 'pack';
-    const cardId = `${isPack ? 'pack' : 'build'}-${index}`;
-    return `
-        <div class="card ${isPack ? 'card-pack' : ''}" data-index="${cardId}">
-            <div class="card-inner">
-                <div class="card-top">
-                    <div class="image-wrapper ${isPack ? 'square' : ''}">
-                        <img src="${data.image}" loading="lazy" decoding="async" />
-                        <div class="overlay">
-                            <div class="title">${data.title}</div>
-                            <div class="subtitle">${data.subtitle}</div>
-                        </div>
-                    </div>
-                    <div class="info-panel">
-                        <div class="tags">${(data.tags || []).map(tag => `<div class="tag">${tag}</div>`).join('')}</div>
-                        <div class="buttons">
-                            <button class="toggle-download"><i class="fa fa-download"></i> Download</button>
-                            <button class="toggle-info"><i class="fa fa-circle-info"></i> More Info</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="expandable-wrapper download-wrapper">
-                    <div class="expandable-content">
-                        ${data.downloads.map(file => `
-                            <a href="${file.link}" class="file-card" download>
-                                <div class="file-icon"></div>
-                                <div class="file-info">
-                                    <div class="file-name">${file.name}</div>
-                                    <div class="file-size">${file.size}</div>
-                                </div>
-                            </a>
-                            ${file.screenshots && file.screenshots.length ? `
-                            <div class="download-screens">
-                                ${file.screenshots.map(img => `<img src="${img}" loading="lazy" decoding="async" alt="screenshot" />`).join('')}
-                            </div>` : ''}
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="expandable-wrapper info-wrapper">
-                    <div class="expandable-content">${renderMarkdown(data.info || '')}</div>
-                </div>
-            </div>
-        </div>`;
-}
+        function applyFiltersAndSearch() {
+            const searchValue = document.getElementById('searchInput')?.value.toLowerCase().trim() || '';
+            filteredCardsData = cardsData.filter(item => {
+                const matchesSearch = searchValue === '' ||
+                item.title.toLowerCase().includes(searchValue) ||
+                (item.subtitle || '').toLowerCase().includes(searchValue);
+                const matchesTags = selectedTags.size === 0 ||
+                (item.tags || []).some(tag => selectedTags.has(tag));
+                return matchesSearch && matchesTags;
+            });
 
-function bindToggleButtons() {
-    document.querySelectorAll('.toggle-download').forEach(btn =>
-        btn.onclick = e => togglePanel(e, 'download')
-    );
-    document.querySelectorAll('.toggle-info').forEach(btn =>
-        btn.onclick = e => togglePanel(e, 'info')
-    );
-}
+            slideBuild = 0;
+            slidePack = 0;
+            updateCarousels();
+        }
 
-function togglePanel(e, type) {
-    const card = e.currentTarget.closest('.card');
-    const panel = card.querySelector(`.${type}-wrapper`);
-    const other = card.querySelector(`.${type === 'download' ? 'info' : 'download'}-wrapper`);
+        function loadCardsData() {
+            fetch('archive_data.json')
+            .then(res => res.json())
+            .then(data => {
+                cardsData = data.items || [];
+                filteredCardsData = [...cardsData];
+                updateCarousels();
+                populateTagToggles(); // Will refetch the same data
+            })
+            .catch(err => {
+                console.error("Failed to load archive_data.json", err);
+            });
+        }
 
-    if (other) other.style.height = '0px';
-    const isOpen = panel.style.height && panel.style.height !== '0px';
-    panel.style.height = isOpen ? '0px' : `${panel.querySelector('.expandable-content').scrollHeight}px`;
-}
+        function populateTagToggles() {
+            fetch('archive_data.json')
+            .then(res => res.json())
+            .then(data => {
+                const tagContainer = document.getElementById('tagContainer');
+                tagContainer.innerHTML = '';
 
-function showLoadingCard() {
-    document.getElementById("track-builds").innerHTML = `
-        <div class="card loading-card">
-            <div class="card-inner">
-                <div class="shimmer-image"></div>
-                <div class="shimmer-text title"></div>
-                <div class="shimmer-text subtitle"></div>
-            </div>
-        </div>`;
-    document.getElementById("dots-build").innerHTML = '';
-    document.getElementById("track-packs").innerHTML = '';
-    document.getElementById("dots-pack").innerHTML = '';
-}
+                const tagGroups = data.tag_type || {};
+                cardsData = data.items || [];
+                filteredCardsData = [...cardsData];
 
-async function loadCardsData() {
-    showLoadingCard();
-    try {
-        const res = await fetch("archive_data.json");
-        cardsData = await res.json();
-        setupFilters(cardsData);
-        updateCarousels();
-    } catch (error) {
-        console.error("Error loading cards data:", error);
-        updateCarousels();
-    }
-}
+                let isFirst = true;
 
-function filteredByType(type) {
-    const base = activeFilter.length
-        ? cardsData.filter(c => activeFilter.every(t => (c.tags || []).includes(t)))
-        : cardsData;
-    return base.filter(c => (c.type || "build") === type);
-}
+                for (const category in tagGroups) {
+                    // Add a divider (but not before the first one)
+                    if (!isFirst) {
+                        const divider = document.createElement('div');
+                        divider.style = `
+                        width: 100%;
+                        height: 1px;
+                        background: rgba(255, 255, 255, 0.08);
+                        margin: 12px 0;
+                        `;
+                        tagContainer.appendChild(divider);
+                    }
+                    isFirst = false;
 
-function renderCarousel(type, slide, trackId, dotsId) {
-    const cards = filteredByType(type);
-    const track = document.getElementById(trackId);
-    const dots = document.getElementById(dotsId);
+                    // Add heading
+                    const heading = document.createElement('div');
+                    heading.textContent = category;
+                    heading.style = `
+                    width: 100%;
+                    font-weight: 600;
+                    font-size: 16px;
+                    color: white;
+                    margin-bottom: 6px;
+                    `;
+                    tagContainer.appendChild(heading);
 
-    if (!cards.length) {
-        track.innerHTML = '<div class="card"><div class="card-inner"><div style="padding: 40px; color:white; text-align:center;">No cards found.</div></div></div>';
-        dots.innerHTML = '';
-        return;
-    }
+                    // Add each toggle
+                    tagGroups[category].forEach(tag => {
+                        const wrapper = document.createElement("div");
+                        wrapper.style.display = "flex";
+                        wrapper.style.alignItems = "center";
+                        wrapper.style.gap = "10px";
 
-    const visibleCards = cards.filter((_, i) => Math.abs(i - slide) <= 1);
-    track.innerHTML = visibleCards.map(c => {
-        const index = cardsData.indexOf(c);
-        return createCard(c, index);
-    }).join('');
-    dots.innerHTML = cards.map((_, i) =>
-        `<div class="carousel-dot ${i === slide ? 'active' : ''}" data-slide="${i}"></div>`
-    ).join('');
+                        wrapper.innerHTML = `
+                        <label class="toggle">
+                        <input type="checkbox" value="${tag}">
+                        <span class="slider"></span>
+                        </label>
+                        <span style="color: white;">${tag}</span>
+                        `;
 
-    bindToggleButtons();
+                        const checkbox = wrapper.querySelector('input');
+                        checkbox.addEventListener('change', () => {
+                            if (checkbox.checked) selectedTags.add(tag);
+                            else selectedTags.delete(tag);
+                            applyFiltersAndSearch();
+                        });
 
-    const activeSlide = type === 'build' ? slideBuild : slidePack;
-    track.style.transform = `translateX(-${activeSlide * 100}%)`;
-    document.getElementById(`prev-${type}`).disabled = activeSlide === 0;
-    document.getElementById(`next-${type}`).disabled = activeSlide === cards.length - 1;
+                        tagContainer.appendChild(wrapper);
+                    });
+                }
 
-    document.querySelectorAll(`#${dotsId} .carousel-dot`).forEach(dot =>
-        dot.onclick = e => {
-            if (type === 'build') slideBuild = parseInt(e.target.dataset.slide);
-            else slidePack = parseInt(e.target.dataset.slide);
+                updateCarousels();
+            });
+        }
+
+        document.getElementById('searchInput')?.addEventListener('input', applyFiltersAndSearch);
+
+        document.getElementById('prev-build').onclick = () => {
+            if (slideBuild > 0) slideBuild--;
             closeAllPanels();
             updateCarousels();
-        });
-}
+        };
+        document.getElementById('next-build').onclick = () => {
+            if (slideBuild < filteredByType('build').length - 1) slideBuild++;
+            closeAllPanels();
+            updateCarousels();
+        };
+        document.getElementById('prev-pack').onclick = () => {
+            if (slidePack > 0) slidePack--;
+            closeAllPanels();
+            updateCarousels();
+        };
+        document.getElementById('next-pack').onclick = () => {
+            if (slidePack < filteredByType('pack').length - 1) slidePack++;
+            closeAllPanels();
+            updateCarousels();
+        };
 
-function setupFilters(data) {
-    const allTags = [...new Set(data.flatMap(c => c.tags || []))].sort();
-    const panel = document.getElementById("filter-panel");
-    panel.innerHTML = '';
-
-    allTags.forEach(tag => {
-        const wrapper = document.createElement("label");
-        wrapper.className = "toggle-container";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = tag;
-
-        const slider = document.createElement("span");
-        slider.className = "slider";
-
-        const labelText = document.createElement("span");
-        labelText.className = "toggle-label";
-        labelText.textContent = tag;
-
-        wrapper.appendChild(checkbox);
-        wrapper.appendChild(slider);
-        wrapper.appendChild(labelText);
-        panel.appendChild(wrapper);
-    });
-
-    panel.addEventListener("change", () => {
-        const selected = [...panel.querySelectorAll("input:checked")].map(c => c.value);
-        activeFilter = selected;
-        slideBuild = 0;
-        slidePack = 0;
-        document.getElementById("filter-indicator").style.display = selected.length ? "inline" : "none";
-        updateCarousels();
-    });
-
-    document.getElementById("filter-toggle").addEventListener("click", () => {
-        panel.classList.toggle("hidden");
-    });
-
-    document.addEventListener("click", (e) => {
-        const btn = document.getElementById("filter-toggle");
-        if (!panel.contains(e.target) && !btn.contains(e.target)) {
-            panel.classList.add("hidden");
-        }
-    });
-}
-
-function updateCarousels() {
-    renderCarousel('build', slideBuild, 'track-builds', 'dots-build');
-    renderCarousel('pack', slidePack, 'track-packs', 'dots-pack');
-}
-
-function closeAllPanels() {
-    document.querySelectorAll('.expandable-wrapper').forEach(p => p.style.height = '0px');
-}
-
-document.getElementById('prev-build').onclick = () => {
-    if (slideBuild > 0) slideBuild--;
-    closeAllPanels();
-    updateCarousels();
-};
-document.getElementById('next-build').onclick = () => {
-    if (slideBuild < filteredByType('build').length - 1) slideBuild++;
-    closeAllPanels();
-    updateCarousels();
-};
-document.getElementById('prev-pack').onclick = () => {
-    if (slidePack > 0) slidePack--;
-    closeAllPanels();
-    updateCarousels();
-};
-document.getElementById('next-pack').onclick = () => {
-    if (slidePack < filteredByType('pack').length - 1) slidePack++;
-    closeAllPanels();
-    updateCarousels();
-};
-
-loadCardsData();
-
-const filterBar = document.querySelector('.filter-bar');
-window.addEventListener('scroll', () => {
-    filterBar.classList.toggle('stuck', window.scrollY > 60);
-});
-</script>
+        loadCardsData();
+    </script>
 </body>
 </html>

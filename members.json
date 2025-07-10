@@ -3,11 +3,10 @@
     "name": "FireBee",
     "ign": "FireBee45",
     "role": "owner",
-    "pfp": "https://raw.githubusercontent.com/HiveTechServer/Docs/main/IMG_1251.png",
+    "pfp": "https://media.discordapp.net/attachments/1194301617130962964/1361678760918909141/IMG_1251.png?ex=686a6b2b&is=686919ab&hm=3c5ad8dd2310ef304a705ce2c22452f08ca94d099e84d46cd91d8499237508ff&",
     "youtube": "https://youtube.com/@FireBee45",
     "twitch": "https://www.twitch.tv/firebeelive",
-    "discord": "https://discord.gg/k8SzMjMn9X",
-    "github": "https://github.com/Firebee45"
+    "discord": "https://discord.gg/k8SzMjMn9X"
   },
   {
     "name": "Citrus",
@@ -32,7 +31,7 @@
     "name": "Dnator",
     "ign": "Dnator1195",
     "role": "member",
-    "pfp": "https://raw.githubusercontent.com/HiveTechServer/Docs/main/IMG_2406.jpeg",
+    "pfp": "https://images.app.goo.gl/PuBqg1ex6VnVyrLX8",
     "youtube": "https://youtube.com/@dnator1195?feature=shared"
   },
   {
@@ -125,7 +124,7 @@
   },
   {
     "name": "Nebula",
-    "ign": "SmokyAthlete51",
+    "ign": "nebula_kakapo",
     "role": "member",
     "pfp": "https://images-ext-1.discordapp.net/external/4sKscKopzFM0dao-jGQcyLB8KdgpxO-Q7v_FvvO1-JY/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1088604163736342608/3926021243576e9c96c922c054b8a6e9.png",
     "youtube": "https://youtube.com/@nebula_kakapo?si=DYDlwg81NEJcx6rg"
@@ -211,18 +210,5 @@
     "ign": "Rombutaun  ",
     "role": "member",
     "pfp": "https://images-ext-1.discordapp.net/external/iaCPflZ1ZkZZ_bD4LSgU-8MUMg1GrMoTtx-TMPK52fw/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1184321057742667776/b6f3922137d6b9f567ee0700caf8483c.png"
-  },
-  {
-    "name": "Razor",
-    "ign": "RazorBlade69699",
-    "role": "member",
-    "pfp": "https://cdn.discordapp.com/avatars/1159297533038825482/54e78994456c06cd57de1df257c66eca",
-    "youtube": "https://youtube.com/@razor_blade69699"
-  },
-  {
-    "name": "Wu1f",
-    "ign": "X x wu1f x X",
-    "role": "member",
-    "pfp": "https://images-ext-1.discordapp.net/external/vXPa0S0kEoZltG6yf5N0czYR7WblIsqvWGVnP2HVV_w/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1099092059526287423/441516750fc8e984c44119733bd457e0.png"
   }
 ]

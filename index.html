@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HiveTech Home</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     * {
       margin: 0;
@@ -13,16 +14,32 @@
     }
 
     html, body {
+      height: 100%;
       width: 100%;
       overflow-x: hidden;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Inter', sans-serif;
       background: linear-gradient(to top, #cc5500, #ff8c42);
+      background-attachment: fixed;
+      background-size: cover;
+      background-repeat: no-repeat;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, #cc5500, #ff8c42);
+      z-index: -1;
     }
 
     .floating-nav {
@@ -30,17 +47,20 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       z-index: 999;
       padding: 8px 0;
     }
 
     .floating-nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
-      padding: 0 10px;
+      padding: 0 20px;
     }
 
     .floating-nav-inner a {
@@ -48,19 +68,19 @@
       text-align: center;
       color: #ddd;
       text-decoration: none;
-      font-size: 13px;
+      font-size: 14px;
       transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      padding: 6px 0;
+      padding: 8px 0;
       border-radius: 12px;
       position: relative;
     }
 
     .floating-nav-inner a i {
-      font-size: 18px;
+      font-size: 20px;
     }
 
     .floating-nav-inner a.active {
@@ -93,12 +113,12 @@
     }
 
     .logo-panel {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
       padding: 30px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       width: 100%;
       max-width: 500px;
       text-align: center;
@@ -106,11 +126,11 @@
 
     .logo-background {
       background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(8px);
-      border-radius: 15px;
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
       padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       display: inline-block;
     }
 
@@ -119,30 +139,30 @@
       height: 120px;
       border-radius: 12px;
       object-fit: contain;
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
     }
 
     .logo-placeholder {
       width: 120px;
       height: 120px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
-      color: #333;
-      border: 2px dashed rgba(255, 255, 255, 0.4);
+      color: #ccc;
+      border: 2px dashed rgba(255, 255, 255, 0.2);
     }
 
     .buttons-panel {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
       padding: 40px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       width: 100%;
       max-width: 500px;
       display: flex;
@@ -153,17 +173,17 @@
     }
 
     .glass-button {
-      background: rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
       padding: 20px;
       color: white;
       font-size: 16px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       width: 130px;
       height: 130px;
       text-align: center;
@@ -180,21 +200,21 @@
       background: rgba(255, 140, 66, 0.4);
       border-color: rgba(255, 140, 66, 0.6);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 140, 66, 0.3);
+      box-shadow: 0 16px 50px rgba(255, 140, 66, 0.3);
     }
 
     .glass-button:hover:not(.active) {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.1);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
     }
 
     .content-panel {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       width: 100%;
       max-width: 800px;
       height: 320px;
@@ -216,7 +236,7 @@
       width: 100%;
       height: 100%;
       border: none;
-      border-radius: 15px;
+      border-radius: 30px;
     }
 
     .bottom-section {
@@ -231,16 +251,46 @@
 
     .bottom-info {
       background: #333;
-      padding: 8px 20px;
+      padding: 10px 24px;
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      min-height: 35px;
+      min-height: 40px;
+      color: #ccc;
+      font-size: 13px;
     }
 
-    .info-text {
-      color: #ccc;
-      font-size: 12px;
+    @media (max-width: 768px) {
+      .floating-nav-inner {
+        padding: 0 15px;
+      }
+
+      .floating-nav-inner a {
+        font-size: 12px;
+      }
+
+      .floating-nav-inner a i {
+        font-size: 18px;
+      }
+
+      .main-content {
+        padding: 100px 15px 30px;
+        gap: 25px;
+      }
+
+      .logo-panel, .buttons-panel {
+        padding: 25px;
+      }
+
+      .glass-button {
+        width: 110px;
+        height: 110px;
+        font-size: 14px;
+      }
+
+      .content-panel {
+        height: 280px;
+      }
     }
   </style>
 </head>
@@ -258,7 +308,7 @@
   <div class="main-content">
     <div class="logo-panel">
       <div class="logo-background">
-        <img src="IMG_8585.png" alt="HiveTech Logo" class="logo-image"
+        <img src="HT.png" alt="HiveTech Logo" class="logo-image"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="logo-placeholder" style="display: none;">Logo not found</div>
       </div>
@@ -286,7 +336,7 @@
 
   <div class="bottom-section">
     <div class="bottom-line"></div>
-    <div class="bottom-info"><span class="info-text">An official HiveTech product</span></div>
+    <div class="bottom-info">An official HiveTech product</div>
   </div>
 
   <script>
